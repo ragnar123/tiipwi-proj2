@@ -1,6 +1,6 @@
 <html>
 <head></head>
-<body>
+<body onload="load()">
 
 <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw" type="text/javascript"></script>
 <script type="text/javascript">
@@ -15,6 +15,7 @@
 
     function load() {
     if (GBrowserIsCompatible()) {
+        console.log("It really IS!")
         var map = new GMap2(document.getElementById("map"));
         map.addControl(new GSmallMapControl());
         map.addControl(new GMapTypeControl());
@@ -28,8 +29,11 @@
    }
    //]]>
   </script>
-<div id="map"></div>
+<div id="map" style="width: 640px;
+    height: 300px;"></div>
 
+
+<h1>Sensor list</h1>
 
 {% if sensor_list %}
 <ul>
