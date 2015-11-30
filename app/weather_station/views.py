@@ -3,8 +3,10 @@ from django.http import HttpResponse
 
 
 # Create your views here.
-def detail(request):
-    return HttpResponse("You're looking at question %s." )
 
 def index(request):
-    return HttpResponse("You're looking at the RPI weather station." )
+    return HttpResponse("You're looking at the RPI weather station. <br>Try to go to /info/NODEID ")
+
+
+def info(request, paramtere):
+    return HttpResponse("NODE ID: %s.\n\n To serve: { temp: n, humid: n, .... to be defined }" % paramtere )
