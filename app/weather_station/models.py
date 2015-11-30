@@ -10,7 +10,7 @@ class SensorNode(models.Model):
 
 
 class SensorReading(models.Model):
-    node = models.ForeignKey(SensorNode)
+    node = models.ForeignKey(SensorNode, default=-1)
     timestamp = models.DateTimeField('date published') # stamped at db insertion
  
 
