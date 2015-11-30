@@ -6,3 +6,11 @@
 
 
 
+
+
+What models and views do we need?
+
+
+
+
+
