@@ -6,6 +6,7 @@ from django.template import RequestContext, loader
 from weather_station.models import SensorNode
 
 
+
 def index(request):
     template = loader.get_template('index.html')
 
@@ -27,4 +28,3 @@ def list(request):
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
     return HttpResponse(resp)
-
