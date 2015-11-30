@@ -1,8 +1,5 @@
 from django.db import models
 
-class SensorReading(models.Model):
-    timestamp = models.DateTimeField('date published') # stamped at db insertion
-
 class SensorNode(models.Model):
     first_seen = models.DateTimeField('date published')
     sensor_id = models.IntegerField(default=0)
@@ -10,5 +7,11 @@ class SensorNode(models.Model):
 
     def __str__(self):
         return "Sensor node #%s" % self.sensor_id 
+
+
+class SensorReading(models.Model):
+    node = models.ForeignKey(SensorNode)
+    timestamp = models.DateTimeField('date published') # stamped at db insertion
+ 
 
 
