@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class SensorReading(models.Model):
     timestamp = models.DateTimeField('date published') # stamped at db insertion
 
