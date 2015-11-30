@@ -1,0 +1,14 @@
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 30, 2015 - 15:28:44
+Django version 1.7.11, using settings 'app.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 30, 2015 - 15:29:52
+Django version 1.7.11, using settings 'app.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
