@@ -15,4 +15,12 @@ http://e2e691fb.ngrok.io/
 
 
 
+A weather station node is either on slave or in master mode. 
+
+The master node is collecting and serving data, whereas the others are just plain sensor nodes.
+
+
+
+
+
 
