@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-
+from django.http import JsonResponse
 
 from weather_station.models import SensorNode
+import json
 
 
-
+# Main page. Shows map & list of nodes
 def index(request):
     template = loader.get_template('index.html')
 
@@ -16,15 +17,31 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
-def info(request, paramtere):
-    return HttpResponse("NODE ID: %s.\n\n To serve: { temp: n, humid: n, .... to be defined }" % paramtere )
+# Information about a single node
+def info(request, node_id):
+    response_data = {}
+    response_data['id'] = node_id
+    response_data['position'] = [56.1572, 10.2107]
 
+    resp = SensorNode.objects.filter(sensor_id=node_id)
+    if len(resp) == 1:
+        response_data['timestamp'] = resp[0].first_seen
+
+    return JsonResponse(response_data)
 
 def list(request):
+    response_data = {}
+    response_data['id'] = id
+    response_data['timestamp']
+
     nodes = SensorNode.objects.all()
-    resp = "LIST OF CONNECTED NODES / all " + str(nodes)
-    return HttpResponse(resp)
+    #for node in nodes:
+        # We need to extract: nodeis, position, last readings, etc?
+        # 1. fetch the sensor readings from db.
+
+    return JsonResponse(json.dumps(nodes), safe=False)
 
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
     return HttpResponse(resp)
+

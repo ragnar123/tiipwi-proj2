@@ -1,4 +1,5 @@
 from django.db import models
+import json
 
 class SensorNode(models.Model):
     first_seen = models.DateTimeField('date published')
@@ -9,9 +10,16 @@ class SensorNode(models.Model):
         return "Sensor node #%s" % self.sensor_id 
 
 
+
 class SensorReading(models.Model):
     node = models.ForeignKey(SensorNode, default=-1)
     timestamp = models.DateTimeField('date published') # stamped at db insertion
+
+    #type!!!
+    #value!!
+
+    ## PLAN :- The sensor reading packets will have the sensor node id in them.
+
  
 
 

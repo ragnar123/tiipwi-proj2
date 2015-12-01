@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,75 +6,19 @@
 </head>
 <body onload="load()">
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw" type="text/javascript"></script>
-  <script type="text/javascript">
-    function createMarker(point,html) {
-        var marker = new GMarker(point);
-        GEvent.addListener(marker, "click", function() {
-            marker.openInfoWindowHtml(html);
-        });
-        return marker;
-    }
-    function parseResponse(data) {
-        data = JSON.parse(data);
+  <script type="text/javascript" src="{% static 'app.js' %}"></script>
+  <div id="map" style="width: 640px; height: 300px;"></div>
 
-        addMarker(data.position);
+  <h1>Sensor list</h1>
 
-    }
-    function addWeatherStationMarkerToGoogleMap(nodeid) {
-        // Step 1: Fetch the information about the weather station
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState == 4) {
-              var data = xhr.responseText;
-
-              parseResponse(data);
-          }
-
-        }
-        xhr.open('GET', '/info/' + nodeid, true);
-        xhr.send(null);
-    }
-
-    function addMarker(pos) {
-      var point = new GLatLng(pos[0], pos[1]);
-      var marker = createMarker(point, '<div style="width:240px">Place: <b>ANTWERPEN</b><br></div>');
-      map.addOverlay(marker);
-      map.setCenter(new GLatLng(pos[0], pos[1]), 9);
-
-
-    }
-    function load() {
-      var node_to_fetch = "1001";
-
-      addWeatherStationMarkerToGoogleMap(node_to_fetch);
-
-
-        if (GBrowserIsCompatible()) {
-            map = new GMap2(document.getElementById("map")); // Globally available. Go shame in corner.
-            map.addControl(new GSmallMapControl());
-            map.addControl(new GMapTypeControl());
-      //      map.setCenter(new GLatLng(51.16349933440274, 4.371164292063712 ), 6);
-
-            // addMarker([51.16349933440274, 4.371164292063712])
-
-    }
-   }
-   var map = null;
-  </script>
-<div id="map" style="width: 640px;
-    height: 300px;"></div>
-
-
-<h1>Sensor list</h1>
-
-{% if sensor_list %}
-<ul>
+  {% if sensor_list %}
+  <ul>
     {% for sensor in sensor_list %}
-        <li><a href="/info/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a></li>
+      <li><a href="/info/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a></li>
     {% endfor %}
-    </ul>
-    {% else %}
-<p>No polls are available.</p>
-{% endif %}
+  </ul>
+  {% else %}
+    <p>No sensors are available.</p>
+  {% endif %}
 </body>
 </html>

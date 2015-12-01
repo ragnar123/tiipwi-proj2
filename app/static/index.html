@@ -1,0 +1,197 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 ielt10 ielt9 ielt8 ielt7 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 ielt10 ielt9 ielt8 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 ielt10 ielt9 oldie" lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="no-js ie9 ielt10" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js iegt9" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="msapplication-TileImage" content="/apple-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#0085cf">
+  <meta name="application-name" content="WEATHER_STATION">
+
+  <title>WEATHER_STATION</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://d1ita7utfg6pwh.cloudfront.net/assets/application-39174b9c7cb3fa7d86a0f4b0db16980d.css" media="screen" rel="stylesheet" type="text/css" />
+
+  <script type="text/javascript" src="//use.typekit.net/cwq5rkg.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  <script src="https://d1ita7utfg6pwh.cloudfront.net/assets/zurbfoundation/modernizr.foundation-5c8db04796b258cc87b05ceddc790040.js" type="text/javascript"></script>
+</head>
+
+
+<body>
+  <!-- #container -->
+  <div class="container full ">
+
+    <div id="jsDisclaimer" class="disclaimer">
+  <span>This version of WEATHER_STATION is not intended for use. </span>
+  <span id="jsCloseDisclaimer" class="disclaimer__btn" title="close message">&times;</span>
+</div>
+
+      <header class="app-header contain-to-grid" role="banner">
+  <div class="headermenu">
+    <nav class="app-header-bar top-bar clearfix" role="navigation">
+      <ul class="app-header-branding">
+        <li class="app-header-logo name">
+          <h1 class="app-header-logo-heading">
+            <a href="/" class="app-header-logo-link">WEATHER_STATION</a>
+          </h1>
+        </li>
+        <li class="app-header-toggle toggle-topbar">
+          <a href="#"><span class="app-header-toggle-text">Menu</span><i class="icon-menu"></i></a>
+        </li>
+      </ul>
+
+      <section class="app-header-content">
+          <!-- Left Nav Section -->
+
+          <ul class="left">
+            <li class="has-dropdown"><a href="/dev/">Developer Center</a>
+              <ul class="dropdown">
+                <li><a href="/dev/tutorials/">Tutorials</a></li>
+                <li><a href="/dev/libraries/">Libraries</a></li>
+                <li><a href="/dev/hardware/">Hardware</a></li>
+                <li><a href="/dev/docs/api/">API Docs</a></li>
+                <li><a href="/dev/help/">Help</a></li>
+              </ul>
+            </li>
+          </ul>
+
+      </section>
+    </nav>
+  </div>
+  </header>
+
+
+<section class="app-main" role="main">
+  <div class="app-main-inner">
+
+
+
+<section class="app-main" role="main">
+  <div class="app-main-inner">
+    <div class="device-page">
+      <div class="workbench-info">
+        <div class="row">
+          <div class="module-info twelve columns">
+
+            <h3 class="module-info-title">Crozet FR AirPi</h3>
+
+            <p class="module-line row">
+              <span class="module-line-label two columns">Feed ID</span>
+              <span class="module-line-value ten columns">129529</span>
+            </p>
+            <p class="module-line row">
+              <span class="module-line-label three columns">API Endpoint</span>
+              <span class="module-line-value nine columns"><a href="https://api.xively.com/v2/feeds/129529">https://api.xively.com/v2/feeds/129529</a></span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="workbench-content row">
+        <div class="twelve columns">
+          <div class="module-content">
+            <!-- module channels -->
+<section class="module-channels module" id="js-channels">
+  <header class="module-header">
+    <h4 class="module-heading">
+      <span class="has-tip tip-right tip-fixed" title="Often also referred to as datastreams. Contextual buckets to group your devices data.">Channels</span>
+      <p class="channel-updated" id="js-feed-updated"></p>
+    </h4>
+    <a class="graphtools-toggle js-toggle-all" href="#"><i class="button-icon icon-graphs"></i><span class="button-text">Graphs</span></a>
+  </header>
+  <div class="module-content">
+    <div class="channels"></div>
+  </div>
+</section>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="workbench-content row">
+        <div class="six columns">
+            <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false&amp;key=AIzaSyDVRrBUdMuI7SiWvqPsEU_Su_R8_OqYGTY"></script>
+
+<!-- module location -->
+<section class="module-location module">
+
+  <div id="js-location" class="module-content"></div>
+
+  </section>
+
+        </div>
+
+        <div class="workbench-grid-tools six columns" id="tools">
+          <section class="module-metadata module">
+  <div id="js-metadata" class="module-content"></div>
+  </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      </div>
+    </section>
+
+    
+    <footer class="personal-app-footer" role="contentinfo">
+  <div class="personal-app-footer-inner row">
+    <section class="personal-app-footer-copyright twelve columns">
+      <p class="personal-social-icons">
+      </p>
+      <p class="personal-footer-company">
+      </p>
+    </section>
+  </div>
+</footer>
+
+
+  </div> <!--! end of #container -->
+
+  <script>
+    "use strict";
+
+    var feed = new app.Models.Feed(JSON.parse('{\"id\":129529,\"title\":\"Crozet FR AirPi\",\"private\":\"false\",\"icon\":null,\"website\":\"https://code.google.com/p/dvi-el-display/\",\"tags\":[\"AirPi\"],\"description\":\"AirPi\",\"feed\":\"\",\"auto_feed_url\":null,\"status\":\"frozen\",\"updated\":\"2013-07-10T06:53:52.139007Z\",\"created\":\"2013-05-04T17:13:43.289366Z\",\"email\":null,\"creator\":\"https://personal.xively.com/users/muth\",\"user\":{\"login\":\"muth\"},\"version\":\"1.0.0\",\"datastreams\":[{\"id\":\"0\",\"current_value\":\"24.2\",\"at\":\"2013-07-10T06:53:52.020653Z\",\"max_value\":\"26.7\",\"min_value\":\"16.7\",\"tags\":[\"Temperature\"],\"unit\":{\"type\":null,\"symbol\":\"\\u00b0C\",\"label\":\"\\u00b0C\"},\"datapoints_function\":null,\"datapoints\":[]},{\"id\":\"4\",\"current_value\":\"95959.5\",\"at\":\"2013-07-10T06:53:52.020653Z\",\"max_value\":\"96319.0\",\"min_value\":\"93846.7\",\"tags\":[\"Air Pressure\"],\"unit\":{\"type\":null,\"symbol\":\"Pa\",\"label\":\"Pa\"},\"datapoints_function\":null,\"datapoints\":[]},{\"id\":\"10\",\"current_value\":\"0.11\",\"at\":\"2013-05-30T07:33:09.898661Z\",\"max_value\":\"0.19\",\"min_value\":\"0.0\",\"tags\":[\"Backgound Radiation\"],\"unit\":{\"type\":null,\"symbol\":\"uSv/h\",\"label\":\"uSv/h\"},\"datapoints_function\":null,\"datapoints\":[]}],\"location\":{\"disposition\":\"fixed\",\"name\":\"Crozet\",\"exposure\":\"indoor\",\"domain\":\"physical\",\"ele\":\"550\",\"lat\":46.281597,\"lon\":6.02592600000003},\"product_id\":null,\"device_serial\":null}'));
+    feed.subscribe({
+      cookie: '',
+      resource: '/feeds/129529'
+    });
+
+  </script>
+
+  <script>
+    (new app.Views.ChannelsView({
+      el: $('#js-channels'),
+      collection: feed.get("datastreams"),
+      owner: false
+    })).render();
+
+    (new app.Views.FeedTimestampView({
+      el: $('#js-feed-updated'),
+      model: feed
+    })).render();
+  </script>
+
+    <script>
+      (new app.Views.LocationView({
+        el: $('#js-location'),
+        model: feed,
+        owner: false
+      })).render();
+    </script>
+
+      <script>
+          (new app.Views.MetadataView({
+            el:' #js-metadata',
+            model: feed,
+            owner: false
+          })).render();
+      </script>
+</body>
+</html>
