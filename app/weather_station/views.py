@@ -30,18 +30,20 @@ def info(request, node_id):
     return JsonResponse(response_data)
 
 def list(request):
-    response_data = {}
-    response_data['id'] = id
-    response_data['timestamp']
+    response_data = []
 
     nodes = SensorNode.objects.all()
-    #for node in nodes:
+    for node in nodes:
+        node_data = {}
+        node_data['id'] = node.sensor_id
+        node_data['position'] = [56.1572, 10.2107]
+        response_data.append(node_data)
+
         # We need to extract: nodeis, position, last readings, etc?
         # 1. fetch the sensor readings from db.
 
-    return JsonResponse(json.dumps(nodes), safe=False)
+    return JsonResponse(response_data, safe=False)
 
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
     return HttpResponse(resp)
-

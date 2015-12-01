@@ -40,6 +40,12 @@ function addWeatherStationMarkerToGoogleMap(nodeid) {
 }
 
 function load() {
+  // Step 1: Get list of units from the server
+
+  get('/list/', function(devices) {
+    console.log("Devices:", devices);
+  })
+
   var node_to_fetch = "1001";
   addWeatherStationMarkerToGoogleMap(node_to_fetch);
 

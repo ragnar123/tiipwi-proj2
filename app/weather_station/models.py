@@ -7,7 +7,7 @@ class SensorNode(models.Model):
     position = models.CharField(max_length=200,default='POSITION NOT AVAILABLE.') # Prefer lat/lng coordinates
 
     def __str__(self):
-        return "Sensor node #%s" % self.sensor_id 
+        return "Sensor node #%s" % self.sensor_id
 
 
 
@@ -19,7 +19,3 @@ class SensorReading(models.Model):
     #value!!
 
     ## PLAN :- The sensor reading packets will have the sensor node id in them.
-
- 
-
-
