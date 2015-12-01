@@ -1,4 +1,6 @@
 var map = null;
+var default_map_zoom_level = 9;
+
 
 function createMarker(point, html) {
   var marker = new GMarker(point);
@@ -8,52 +10,38 @@ function createMarker(point, html) {
   return marker;
 }
 
-function addMarker(pos) {
+function addWeatherStationToMap(sensorNode) {
+  var pos = sensorNode.position;
+  var id = sensorNode.sensor_id;
+
+  // Some default locations...
+  if (pos == "AU Library!") {
+    pos = [56.1572, 10.2107];
+  }
+  if (pos == "POSITION NOT AVAILABLE.") {
+    pos = [56.1451312, 10.2811651];
+  }
+
   var point = new GLatLng(pos[0], pos[1]);
-  var marker = createMarker(point, '<div style="width:240px">Place: <b>ANTWERPEN</b><br></div>');
+  var marker = createMarker(point, '<div style="width:240px">SENSOR_ID: <b>' + id + '</b><br></div>');
+  // use templating. suggestion: vue.js
+
   map.addOverlay(marker);
-  map.setCenter(new GLatLng(pos[0], pos[1]), 9);
+  map.setCenter(new GLatLng(pos[0], pos[1]), default_map_zoom_level);
 }
 
-function parseResponse(data) {
-  data = JSON.parse(data);
-  if (data && data.position) {
-    addMarker(data.position);
-  }
-}
-/** TODO: Implement some kind of error handling */
-function get(url, cb) {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
-      var data = xhr.responseText;
-      cb(data);
-    }
-  }
-  xhr.open('GET', url, true);
-  xhr.send(null);
-}
-
-function addWeatherStationMarkerToGoogleMap(nodeid) {
-  // Step 1: Fetch the information about the weather station
-  get('/info/' + nodeid, parseResponse);
-}
 
 function load() {
-  // Step 1: Get list of units from the server
-
-  get('/list/', function(devices) {
-    console.log("Devices:", devices);
-  })
-
-  var node_to_fetch = "1001";
-  addWeatherStationMarkerToGoogleMap(node_to_fetch);
-
+  // Initialize the map
   if (GBrowserIsCompatible()) {
     map = new GMap2(document.getElementById("map"));
-    map.addControl(new GSmallMapControl());
-    map.addControl(new GMapTypeControl());
-    // map.setCenter(new GLatLng(51.16349933440274, 4.371164292063712 ), 6);
-    // addMarker([51.16349933440274, 4.371164292063712])
   }
+
+  // Step 1: Get list of units from the server
+  get('/list/', function(devices) {
+    console.log("Devices:", devices);
+    devices.forEach(addWeatherStationToMap)
+
+  });
+
 }
