@@ -2,6 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.http import JsonResponse
+from django.db import transaction
+
+from django.contrib.auth.models import User
+from weather_station.models import SensorNode
+import datetime
+import string
+import random
+
 
 from weather_station.models import SensorNode
 import json
@@ -48,12 +56,6 @@ def list(request):
 
 
 
-from django.contrib.auth.models import User
-from weather_station.models import SensorNode
-import datetime
-import string
-import random
-
 DEFAULT_SIZE=6
 
 def psw_generator(psw_size, chars=string.ascii_uppercase + string.digits):
@@ -61,8 +63,12 @@ def psw_generator(psw_size, chars=string.ascii_uppercase + string.digits):
 
 def createNewUser(device_mac):
     user = User.objects.create_user(device_mac, email=None, password=None)
+    password = psw_generator(DEFAULT_SIZE)
+
     user.set_password(psw_generator(DEFAULT_SIZE))
     #user.groups.add(authenticated_sensor_group)
+
+    return [user, password];
 
 
 def ifAuthenticatedAddEntry(user_id, raw_password):
@@ -82,14 +88,25 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
 
 
 
-
+@transaction.atomic
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
 
-    name = "asdf_unique+1"
-    createNewUser(name)
+    # The master controller will create a new, unique name for connecting nodes.
+    # If, and only if, the nodes have not connected before.
 
-    return HttpResponse(resp)
+    # The client node is responsible for *saving* the received node_id
+    # to persistent memory!!!
+    # -> resource directory
+    name = psw_generator(12)
+    # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
+    [user, password] = createNewUser(name)
+
+    response_data = {}
+    response_data['username'] = name
+    response_data['password'] = password
+
+    return JsonResponse(response_data);
 
 
 
