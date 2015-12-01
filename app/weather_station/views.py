@@ -21,11 +21,13 @@ def index(request):
 def info(request, node_id):
     response_data = {}
     response_data['sensor_id'] = node_id
-    response_data['position'] = node.position
 
     resp = SensorNode.objects.filter(sensor_id=node_id)
     if len(resp) == 1:
-        response_data['timestamp'] = resp[0].first_seen
+        node = resp[0]
+        response_data['timestamp'] = node.first_seen
+        response_data['position'] = node.position
+
 
     return JsonResponse(response_data)
 
@@ -45,6 +47,39 @@ def list(request):
     return JsonResponse(response_data, safe=False)
 
 
+
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
     return HttpResponse(resp)
+
+
+def put_reading(request, node_id, type, value):
+    # :- if authenticated, proceed.
+    # else, throw a 401!
+
+    # Valid values for type: { temperature, humidity, wind_speed, atmospheric_pressure }
+    # Valid units:           { C,          %,        m/s,        hPa / bar            }
+    # From this, I think I am going to create some subclasses.
+    try:
+        node = SensorNode.objects.get(sensor_id=node_id)
+    except SensorNode.DoesNotExist:
+        return HttpResponse("Unable to find node");
+    except SensorNode.MultipleObjectsReturned:
+        return HttpResponse("her er heilt galid!");
+
+
+
+    if type == "temperature":
+        return HttpResponse("Saved your temps!");
+
+    if type == "humidity":
+        return HttpResponse("Saved your values");
+
+    if type == "wind_speed":
+        return HttpResponse("Saved your wind speeds!");
+
+    if type == "atmospheric_pressure":
+        return HttpResponse("Saved your values");
+
+
+    return HttpResponse("I do not know what to do with your " + type);
