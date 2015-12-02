@@ -3,17 +3,15 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.http import JsonResponse
 from django.db import transaction
-
 from django.contrib.auth.models import User
-from weather_station.models import SensorNode
+
 import datetime
 import string
 import random
-
-
-from weather_station.models import SensorNode
 import json
 
+from weather_station.models import SensorNode
+from weather_station.models import SensorReading
 
 # Main page. Shows map & list of nodes
 def index(request):
@@ -99,8 +97,8 @@ def put_reading(request, node_id, type, value):
     # :- if authenticated, proceed.
     # else, throw a 401!
 
-    # Valid values for type: { temperature, humidity, wind_speed, atmospheric_pressure }
-    # Valid units:           { C,          %,        m/s,        hPa / bar            }
+    # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
+    # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
     # From this, I think I am going to create some subclasses.
     try:
         node = SensorNode.objects.get(sensor_id=node_id)
@@ -109,7 +107,12 @@ def put_reading(request, node_id, type, value):
     except SensorNode.MultipleObjectsReturned:
         return HttpResponse("her er heilt galid!");
 
+    reading = SensorReading(node=node, timestamp=str(datetime.datetime.now()))
 
+    if type == "light":
+        reading.type = type
+        reading.save()
+        return HttpResponse("Saved the light readings");
 
     if type == "temperature":
         return HttpResponse("Saved your temps!");

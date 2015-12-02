@@ -15,15 +15,15 @@ function addWeatherStationToMap(sensorNode) {
   var id = sensorNode.sensor_id;
 
   // Some default locations...
-  if (pos == "AU Library!") {
+  if (pos === "AU Library!") {
     pos = [56.1572, 10.2107];
   }
-  if (pos == "POSITION NOT AVAILABLE.") {
+  if (pos === "POSITION NOT AVAILABLE.") {
     pos = [56.1451312, 10.2811651];
   }
 
   var point = new GLatLng(pos[0], pos[1]);
-  var marker = createMarker(point, '<div style="width:240px">SENSOR_ID: <b>' + id + '</b><br></div>');
+  var marker = createMarker(point, '<div>SENSOR_ID: <b>' + id + '</b></div>');
   // use templating. suggestion: vue.js
 
   map.addOverlay(marker);
