@@ -4,11 +4,7 @@ from django.template import RequestContext, loader
 from django.http import JsonResponse
 from django.db import transaction
 
-from django.contrib.auth.models import User
-from weather_station.models import SensorNode
-import datetime
-import string
-import random
+from weather_station.securelayer import securelayer
 
 
 from weather_station.models import SensorNode
@@ -76,16 +72,16 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
 @transaction.atomic
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
-
+    s = securelayer()
     # The master controller will create a new, unique name for connecting nodes.
     # If, and only if, the nodes have not connected before.
 
     # The client node is responsible for *saving* the received node_id
     # to persistent memory!!!
     # -> resource directory
-    name = securelayer.pswGenerator(12)
+    name = s.pswGenerator(12)
     # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
-    [user, password] = securelayer.createNewUser(name)
+    [user, password] = s.createNewUser(name)
 
     response_data = {}
     response_data['username'] = name
