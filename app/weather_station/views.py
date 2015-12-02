@@ -21,6 +21,7 @@ def index(request):
     template = loader.get_template('index.html')
 
     nodes = SensorNode.objects.all()
+
     context = RequestContext(request, {
         'sensor_list': nodes,
     })
@@ -34,8 +35,16 @@ def info(request, node_id):
     resp = SensorNode.objects.filter(sensor_id=node_id)
     if len(resp) == 1:
         node = resp[0]
+
         response_data['timestamp'] = node.first_seen
         response_data['position'] = node.position
+
+        readings = SensorReading.objects.filter(node=node)
+        out = [];
+        for reading in readings:
+            out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
+
+        response_data['readings'] = out
 
 
     return JsonResponse(response_data)
