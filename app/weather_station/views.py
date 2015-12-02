@@ -13,6 +13,9 @@ import json
 from weather_station.models import SensorNode
 from weather_station.models import SensorReading
 
+from weather_station.securelayer import securelayer
+
+
 # Main page. Shows map & list of nodes
 def index(request):
     template = loader.get_template('index.html')
@@ -74,16 +77,16 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
 @transaction.atomic
 def signup(request):
     resp = "The idea is that this will return a new nodeid & key."
-
+    s = securelayer()
     # The master controller will create a new, unique name for connecting nodes.
     # If, and only if, the nodes have not connected before.
 
     # The client node is responsible for *saving* the received node_id
     # to persistent memory!!!
     # -> resource directory
-    name = securelayer.pswGenerator(12)
+    name = s.pswGenerator(12)
     # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
-    [user, password] = securelayer.createNewUser(name)
+    [user, password] = s.createNewUser(name)
 
     response_data = {}
     response_data['username'] = name
