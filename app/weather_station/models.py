@@ -14,8 +14,5 @@ class SensorNode(models.Model):
 class SensorReading(models.Model):
     node = models.ForeignKey(SensorNode, default=-1)
     timestamp = models.DateTimeField('date published') # stamped at db insertion
-
-    #type!!!
-    #value!!
-
-    ## PLAN :- The sensor reading packets will have the sensor node id in them.
+    type = models.CharField(max_length=30,default='UNDEFINED')
+    value = models.DecimalField(default=-1, max_digits=5, decimal_places=2)

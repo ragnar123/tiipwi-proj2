@@ -103,6 +103,9 @@ def put_reading(request, node_id, type, value):
     # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
     # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
     # From this, I think I am going to create some subclasses.
+
+    known_types = ['light', 'temperature', 'humidity', 'wind_speed', 'atmospheric_pressure'];
+
     try:
         node = SensorNode.objects.get(sensor_id=node_id)
     except SensorNode.DoesNotExist:
@@ -110,24 +113,13 @@ def put_reading(request, node_id, type, value):
     except SensorNode.MultipleObjectsReturned:
         return HttpResponse("her er heilt galid!");
 
-    reading = SensorReading(node=node, timestamp=str(datetime.datetime.now()))
 
-    if type == "light":
+    if type in frozenset(known_types):
+        reading = SensorReading(node=node, timestamp=str(datetime.datetime.now()))
         reading.type = type
+        reading.value = value;
         reading.save()
-        return HttpResponse("Saved the light readings");
 
-    if type == "temperature":
-        return HttpResponse("Saved your temps!");
-
-    if type == "humidity":
-        return HttpResponse("Saved your values");
-
-    if type == "wind_speed":
-        return HttpResponse("Saved your wind speeds!");
-
-    if type == "atmospheric_pressure":
-        return HttpResponse("Saved your values");
-
-
-    return HttpResponse("I do not know what to do with your " + type);
+        return HttpResponse("Saved " + type);
+    else:
+        return HttpResponse("Error with " + type);
