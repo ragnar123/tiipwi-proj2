@@ -56,21 +56,6 @@ def list(request):
 
 
 
-DEFAULT_SIZE=6
-
-def psw_generator(psw_size, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(psw_size))
-
-def createNewUser(device_mac):
-    user = User.objects.create_user(device_mac, email=None, password=None)
-    password = psw_generator(DEFAULT_SIZE)
-
-    user.set_password(psw_generator(DEFAULT_SIZE))
-    #user.groups.add(authenticated_sensor_group)
-
-    return [user, password];
-
-
 def ifAuthenticatedAddEntry(user_id, raw_password):
     try:
         node = SensorNode.objects.get(sensor_id=user_id)
@@ -79,7 +64,7 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
     except SensorNode.MultipleObjectsReturned:
         return HttpResponse("her er heilt galid!");
 
-    if check_password(raw_password):
+    if securelayer.checkPassword(raw_password):
         new_entry = SensorReading(node_id=user_id , timestamp= str(datetime.datetime.now()))
         new_entry.save()
     else:
@@ -98,9 +83,9 @@ def signup(request):
     # The client node is responsible for *saving* the received node_id
     # to persistent memory!!!
     # -> resource directory
-    name = psw_generator(12)
+    name = securelayer.pswGenerator(12)
     # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
-    [user, password] = createNewUser(name)
+    [user, password] = securelayer.createNewUser(name)
 
     response_data = {}
     response_data['username'] = name
