@@ -108,12 +108,11 @@ function load() {
       var Temp
 
 
-    function HeatMapCreate(heatMapData, Temp=Math.floor(Math.random() * 100)){
+    function HeatMapCreate(lat, lon, Temp=Math.floor(Math.random() * 100)){
       console.log(Temp);
-      //Temp=100;
       var gradient;
       var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatMapData,
+        data: [new google.maps.LatLng(lat, lon)],
         });
 
         switch (Temp) {
@@ -121,14 +120,12 @@ function load() {
               heatmap.set('gradient', gradients['red']);
               break;
           case (Temp > 0 && Temp < 100):
-              console.log("case 2");
               heatmap.set('gradient', gradients['blue']);
               break;
           case (Temp == 100):
               heatmap.set('gradient', gradients['green']);
               break;
           default:
-              console.log(Temp);
               heatmap.set('gradient', gradients['purple']);
               break;
             }
@@ -136,11 +133,10 @@ function load() {
         heatmap.setMap(map);
           }
 
-      /*for (i = 0; i < heatmapData.length; i++) {
+      for (i = 0; i < heatmapData.length; i++) {
         console.log(heatmapData[i]);
-        HeatMapCreate(heatmapData[i],Temp);
-      }*/
-      HeatMapCreate(heatmapData,Temp);
+        HeatMapCreate(Math.floor(Math.random()*2)+56,Math.floor(Math.random()*2)+10,Temp);
+      }
 
 /*
   var drawingManager = new google.maps.drawing.DrawingManager({
