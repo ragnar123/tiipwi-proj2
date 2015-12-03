@@ -40,6 +40,8 @@ function addWeatherStationToMap(sensorNode) {
   });
 
 }
+
+
 function showWindow(event, marker, sensorNode) {
   var node = document.getElementById('infoWindow');
   node.style.visibility = "visible";
@@ -75,8 +77,72 @@ function load() {
   });
 
 
+      var heatmapData = [
+      new google.maps.LatLng(56.1572, 10.2107),
+      new google.maps.LatLng(56.1572, 10.2109),
+      new google.maps.LatLng(56.1572, 10.2119),
+      new google.maps.LatLng(56.1572, 10.2209),
+      new google.maps.LatLng(56.1562, 10.2109),
+      new google.maps.LatLng(56.1552, 10.2109),
+      ];
+
+      var gradients = {
+          red: [
+              'rgba(255, 0, 0, 0)',
+              'rgba(255, 0, 0, 1)'
+          ],
+          green: [
+              'rgba(0, 255, 0, 0)',
+              'rgba(0, 255, 0, 1)'
+          ],
+          blue: [
+              'rgba(0, 0, 255, 0)',
+              'rgba(0, 0, 255, 1)'
+          ],
+          purple: [
+              'rgba(128, 0, 128, 0)',
+              'rgba(128, 0, 128, 1)'
+          ]
+      };
+
+      var Temp
 
 
+    function HeatMapCreate(heatMapData, Temp=Math.floor(Math.random() * 100)){
+      console.log(Temp);
+      //Temp=100;
+      var gradient;
+      var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatMapData,
+        });
+
+        switch (Temp) {
+          case (Temp == 0):
+              heatmap.set('gradient', gradients['red']);
+              break;
+          case (Temp > 0 && Temp < 100):
+              console.log("case 2");
+              heatmap.set('gradient', gradients['blue']);
+              break;
+          case (Temp == 100):
+              heatmap.set('gradient', gradients['green']);
+              break;
+          default:
+              console.log(Temp);
+              heatmap.set('gradient', gradients['purple']);
+              break;
+            }
+
+        heatmap.setMap(map);
+          }
+
+      /*for (i = 0; i < heatmapData.length; i++) {
+        console.log(heatmapData[i]);
+        HeatMapCreate(heatmapData[i],Temp);
+      }*/
+      HeatMapCreate(heatmapData,Temp);
+
+/*
   var drawingManager = new google.maps.drawing.DrawingManager({
     drawingMode: google.maps.drawing.OverlayType.MARKER,
     drawingControl: true,
@@ -103,7 +169,7 @@ function load() {
     }
   });
   drawingManager.setMap(map);
-
+*/
 
 
 
