@@ -2,17 +2,6 @@ var map = null;
 var default_map_zoom_level = 9;
 Vue.config.debug = true;
 
-
-
-
-function createMarker(point, html) {
-  var marker = new google.maps.Marker(point);
-  //google.maps.Event.addListener(marker, "click", function() {
-  //    marker.openInfoWindowHtml(html);
-  //  });
-  return marker;
-}
-
 function addWeatherStationToMap(sensorNode) {
   var pos = sensorNode.position;
   var id = sensorNode.sensor_id;
@@ -36,7 +25,7 @@ function addWeatherStationToMap(sensorNode) {
   google.maps.event.addDomListener(marker, 'mouseover', function(event) {
     var container = document.getElementsByClassName('right')[0];
     container.innerHTML = "<weather-information heading='" + id + "' msg='" + pos + "'></weather-information>";
-    //    showWindow(event, marker, sensorNode);
+    // showWindow(event, marker, sensorNode);
   });
 
 }
@@ -45,8 +34,8 @@ function addWeatherStationToMap(sensorNode) {
 function showWindow(event, marker, sensorNode) {
   var node = document.getElementById('infoWindow');
   node.style.visibility = "visible";
-  console.log(node.style)
 
+  console.log(node.style);
   console.log("event data", event, sensorNode);
   var demo = new Vue({
     el: node,
@@ -108,6 +97,7 @@ function load() {
       var Temp
 
 
+    //function HeatMapCreate(lat, lon, windAmplitude, windAngle, Temp=Math.floor(Math.random() * 100)){
     function HeatMapCreate(lat, lon, Temp=Math.floor(Math.random() * 100)){
       console.log(Temp);
       var gradient;
@@ -129,14 +119,28 @@ function load() {
               heatmap.set('gradient', gradients['purple']);
               break;
             }
+      /* THIS CODE IS USEFUL IN CASE WE HAVE A WIND SENSOR (POLAR COORDINATES: x=A*cos(Theta),y=A*sin(Theta))
+      var lineSymbol = {
+        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+      };
 
-        heatmap.setMap(map);
-          }
+      var line = new google.maps.Polyline({
+        path: [{lat: lat, lng: lon}, {lat: lat + windAmplitude* Math.cos(windAngle), lng: lon + windAmplitude*Math.sin(windAngle)}],
+        icons: [{
+          icon: lineSymbol,
+          offset: '100%'
+        }],
+        map: map
+      });
+      */
+      heatmap.setMap(map);
+    }
 
-      for (i = 0; i < heatmapData.length; i++) {
-        console.log(heatmapData[i]);
-        HeatMapCreate(Math.floor(Math.random()*2)+56,Math.floor(Math.random()*2)+10,Temp);
-      }
+    for (i = 0; i < heatmapData.length; i++) {
+      console.log(heatmapData[i]);
+      //HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10, Math.floor(Math.random()*1.2), Math.floor(Math.random()*360),Temp);
+      HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10,Temp);
+    }
 
 /*
   var drawingManager = new google.maps.drawing.DrawingManager({
@@ -166,8 +170,6 @@ function load() {
   });
   drawingManager.setMap(map);
 */
-
-
 
   var MyComponent = Vue.extend({
     props: ['sensorId', 'msg'],

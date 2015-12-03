@@ -27,6 +27,14 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
+def getSensorReadings(node_id):
+    readings = SensorReading.objects.filter(node_id=node_id)
+    out = [];
+    for reading in readings:
+        out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
+    return out
+
+
 # Information about a single node
 def info(request, node_id):
     response_data = {}
@@ -38,13 +46,7 @@ def info(request, node_id):
 
         response_data['timestamp'] = node.first_seen
         response_data['position'] = node.position
-
-        readings = SensorReading.objects.filter(node=node)
-        out = [];
-        for reading in readings:
-            out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
-
-        response_data['readings'] = out
+        response_data['readings'] = getSensorReadings(node)
 
 
     return JsonResponse(response_data)
@@ -63,6 +65,22 @@ def list(request):
         # 1. fetch the sensor readings from db.
 
     return JsonResponse(response_data, safe=False)
+
+
+# View to show graphs of the recieved data for a node
+def plot(request, node_id):
+    template = loader.get_template('plots.html')
+    nodes = SensorNode.objects.get(sensor_id=node_id)
+    sensors = []
+
+    readings = SensorReading.objects.filter(node_id=node_id)
+
+    context = RequestContext(request, {
+        'sensors': sensors,
+        'sensor_id': node_id,
+        'readings': getSensorReadings(node_id)
+    })
+    return HttpResponse(template.render(context))
 
 
 
