@@ -1,5 +1,5 @@
 var map = null;
-var default_map_zoom_level = 9;
+var default_map_zoom_level = 11;
 Vue.config.debug = true;
 
 function addWeatherStationToMap(sensorNode) {
@@ -66,80 +66,37 @@ function load() {
   });
 
 
-      var heatmapData = [
-      new google.maps.LatLng(56.1572, 10.2107),
-      new google.maps.LatLng(56.1572, 10.2109),
-      new google.maps.LatLng(56.1572, 10.2119),
-      new google.maps.LatLng(56.1572, 10.2209),
-      new google.maps.LatLng(56.1562, 10.2109),
-      new google.maps.LatLng(56.1552, 10.2109),
+      var readings = [
+      {center: {lat: 56.1572, lng: 10.2107}, temperature:20},
+      {center: {lat: 56.1572, lng: 10.2109}, temperature:0},
+      {center: {lat: 56.1572, lng: 10.2119}, temperature:-20},
+      {center: {lat: 56.1572, lng: 10.2209}, temperature:7},
+      {center: {lat: 56.1562, lng: 10.2109}, temperature:-1},
+      {center: {lat: 56.1552, lng: 10.2109}, temperature:50},
       ];
 
-      var gradients = {
-          red: [
-              'rgba(255, 0, 0, 0)',
-              'rgba(255, 0, 0, 1)'
-          ],
-          green: [
-              'rgba(0, 255, 0, 0)',
-              'rgba(0, 255, 0, 1)'
-          ],
-          blue: [
-              'rgba(0, 0, 255, 0)',
-              'rgba(0, 0, 255, 1)'
-          ],
-          purple: [
-              'rgba(128, 0, 128, 0)',
-              'rgba(128, 0, 128, 1)'
-          ]
-      };
+      var f = chroma.scale(['blue', 'red']);
 
-      var Temp
+    for (var reading in readings) {
+      var value = readings[reading].temperature + 50;
+      if (value < 0) {value = 0}
+      if (value > 100) {value = 100}
+      value = value / 100;
+      console.log(value);
 
+      var color = f(value).toString();
+      console.log(color);
 
-    //function HeatMapCreate(lat, lon, windAmplitude, windAngle, Temp=Math.floor(Math.random() * 100)){
-    function HeatMapCreate(lat, lon, Temp=Math.floor(Math.random() * 100)){
-      console.log(Temp);
-      var gradient;
-      var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: [new google.maps.LatLng(lat, lon)],
-        });
-
-        switch (Temp) {
-          case (Temp == 0):
-              heatmap.set('gradient', gradients['red']);
-              break;
-          case (Temp > 0 && Temp < 100):
-              heatmap.set('gradient', gradients['blue']);
-              break;
-          case (Temp == 100):
-              heatmap.set('gradient', gradients['green']);
-              break;
-          default:
-              heatmap.set('gradient', gradients['purple']);
-              break;
-            }
-      /* THIS CODE IS USEFUL IN CASE WE HAVE A WIND SENSOR (POLAR COORDINATES: x=A*cos(Theta),y=A*sin(Theta))
-      var lineSymbol = {
-        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-      };
-
-      var line = new google.maps.Polyline({
-        path: [{lat: lat, lng: lon}, {lat: lat + windAmplitude* Math.cos(windAngle), lng: lon + windAmplitude*Math.sin(windAngle)}],
-        icons: [{
-          icon: lineSymbol,
-          offset: '100%'
-        }],
-        map: map
+      var Circle = new google.maps.Circle({
+      strokeColor: color,
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: color,
+      fillOpacity: 0.35,
+      map: map,
+      center: readings[reading].center,
+      radius: 10 * 10
       });
-      */
-      heatmap.setMap(map);
-    }
-
-    for (i = 0; i < heatmapData.length; i++) {
-      console.log(heatmapData[i]);
-      //HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10, Math.floor(Math.random()*1.2), Math.floor(Math.random()*360),Temp);
-      HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10,Temp);
     }
 
 /*
