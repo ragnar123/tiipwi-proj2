@@ -2,17 +2,6 @@ var map = null;
 var default_map_zoom_level = 9;
 Vue.config.debug = true;
 
-
-
-
-function createMarker(point, html) {
-  var marker = new google.maps.Marker(point);
-  //google.maps.Event.addListener(marker, "click", function() {
-  //    marker.openInfoWindowHtml(html);
-  //  });
-  return marker;
-}
-
 function addWeatherStationToMap(sensorNode) {
   var pos = sensorNode.position;
   var id = sensorNode.sensor_id;
@@ -36,15 +25,15 @@ function addWeatherStationToMap(sensorNode) {
   google.maps.event.addDomListener(marker, 'mouseover', function(event) {
     var container = document.getElementsByClassName('right')[0];
     container.innerHTML = "<weather-information heading='" + id + "' msg='" + pos + "'></weather-information>";
-    //    showWindow(event, marker, sensorNode);
+    // showWindow(event, marker, sensorNode);
   });
 
 }
 function showWindow(event, marker, sensorNode) {
   var node = document.getElementById('infoWindow');
   node.style.visibility = "visible";
-  console.log(node.style)
 
+  console.log(node.style);
   console.log("event data", event, sensorNode);
   var demo = new Vue({
     el: node,
@@ -103,8 +92,6 @@ function load() {
     }
   });
   drawingManager.setMap(map);
-
-
 
 
   var MyComponent = Vue.extend({
