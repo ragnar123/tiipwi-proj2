@@ -108,6 +108,7 @@ function load() {
       var Temp
 
 
+    //function HeatMapCreate(lat, lon, windAmplitude, windAngle, Temp=Math.floor(Math.random() * 100)){
     function HeatMapCreate(lat, lon, Temp=Math.floor(Math.random() * 100)){
       console.log(Temp);
       var gradient;
@@ -129,14 +130,28 @@ function load() {
               heatmap.set('gradient', gradients['purple']);
               break;
             }
+      /* THIS CODE IS USEFUL IN CASE WE HAVE A WIND SENSOR (POLAR COORDINATES: x=A*cos(Theta),y=A*sin(Theta))
+      var lineSymbol = {
+        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+      };
 
-        heatmap.setMap(map);
-          }
+      var line = new google.maps.Polyline({
+        path: [{lat: lat, lng: lon}, {lat: lat + windAmplitude* Math.cos(windAngle), lng: lon + windAmplitude*Math.sin(windAngle)}],
+        icons: [{
+          icon: lineSymbol,
+          offset: '100%'
+        }],
+        map: map
+      });
+      */
+      heatmap.setMap(map);
+    }
 
-      for (i = 0; i < heatmapData.length; i++) {
-        console.log(heatmapData[i]);
-        HeatMapCreate(Math.floor(Math.random()*2)+56,Math.floor(Math.random()*2)+10,Temp);
-      }
+    for (i = 0; i < heatmapData.length; i++) {
+      console.log(heatmapData[i]);
+      //HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10, Math.floor(Math.random()*1.2), Math.floor(Math.random()*360),Temp);
+      HeatMapCreate(Math.floor(Math.random()*2)+56, Math.floor(Math.random()*2)+10,Temp);
+    }
 
 /*
   var drawingManager = new google.maps.drawing.DrawingManager({
