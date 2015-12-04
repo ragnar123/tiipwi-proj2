@@ -15,7 +15,7 @@ from weather_station.models import SensorReading
 
 from weather_station.securelayer import securelayer
 
-
+REFRESH_RATE = 10000
 # Main page. Shows map & list of nodes
 def index(request):
     template = loader.get_template('index.html')
@@ -146,7 +146,8 @@ def put_reading(request, node_id, type, value):
         reading.type = type
         reading.value = value;
         reading.save()
-
-        return HttpResponse("Saved " + type);
+        response_data = {}
+        response_data['refresh_interval'] = REFRESH_RATE
+        return JsonResponse(response_data);
     else:
         return HttpResponse("Error with " + type);
