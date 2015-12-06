@@ -22,4 +22,7 @@ implementation
 	
 	App.TempRead -> TempSensor.Temperature;
 	
+	// Light component
+	components new HamamatsuS10871TsrC() as LightSensor;
+	App.LightRead -> LightSensor;
 }
