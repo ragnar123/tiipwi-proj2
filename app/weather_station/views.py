@@ -31,7 +31,7 @@ def getSensorReadings(node_id):
     readings = SensorReading.objects.filter(node_id=node_id)
     out = [];
     for reading in readings:
-        out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
+        out.append({'timestamp': reading.timestamp });
     return out
 
 

@@ -13,7 +13,11 @@ class SensorNode(models.Model):
 
 class SensorReading(models.Model):
     node = models.ForeignKey(SensorNode, default=-1)
-    timestamp = models.DateTimeField('date published') # stamped at db insertion
+    timestamp = models.DateTimeField('date published') # stamped at db insertion *OR* timestamped at creation time.
+    light = models.DecimalField(default=-1, max_digits=8,decimal_places=2) # I have *NO* idea what reasonable defaults are. please fix/improve
     temp = models.CharField(max_length=30, default='UNDEFINED')
     humidity = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
     pressure = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
+    wind_speed = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
+    lat = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
+    lon = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
