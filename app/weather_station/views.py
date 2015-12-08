@@ -165,7 +165,15 @@ def put_reading(request, node_id):
     print
 
     if authenticated:
-        # We need to read the post values.
+        light = request.POST.get('light')
+        temp =  request.POST.get('temp')
+        pressure = request.POST.get('pressure')
+        humidity = request.POST.get('humidity')
+        wind_speed = request.POST.get('wind_speed')
+        time = request.POST.get('time')
+        lat = request.POST.get('lat')
+        lon = request.POST.get('lon')
+        
         reading = SensorReading(node=node,
             timestamp=str(datetime.datetime.now())
 
