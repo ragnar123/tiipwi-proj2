@@ -31,7 +31,16 @@ def getSensorReadings(node_id):
     readings = SensorReading.objects.filter(node_id=node_id)
     out = [];
     for reading in readings:
-        out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
+        out.append({
+            'timestamp': reading.timestamp,
+            'temp': reading.temp,
+            'pressure' : reading.pressure,
+            'humidity': reading.humidity,
+            'light': reading.light,
+            'wind_speed' : reading.wind_speed,
+            'lat': reading.lat,
+            'lon': reading.lon
+         });
     return out
 
 

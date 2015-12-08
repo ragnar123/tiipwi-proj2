@@ -6,9 +6,8 @@
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body onload="load()">
-  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing"></script>
-  <!-- <script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw" type="text/javascript"></script>-->
-  <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing"></script>
+  <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
   <script type="text/javascript" src="{% static 'util.js' %}"></script>
   <script type="text/javascript" src="{% static 'app.js' %}"></script>
 
@@ -29,9 +28,53 @@
     {% endif %}
   </div>
 
+
+
   <script>
-    var readings = {{ readings }};
-    console.log(readings);
+    // fetch /info/nodeID
+    // parse the recieved collection
+    // first create a map of types
+    // and then create vectors of each type, respecting the timestamps (and not necesserailly the ids)
+    // use those to create plots
+
+    // And here in the middle section we will define the types in javascipt.
+
+    // .. then eventually we will reach a point where we will have to create the user interface.
+    // Widgets needed: { map, time-series plots, lists }
+    //
+
+
+    // ANd eventually you will replace the sqlite implementation with rethinkdb
+    // it seems to be possible to install it on the RPi: https://rethinkdb.com/docs/install/raspbian/
+
+    function SensorNode() {
+      this.id = "";
+      this.display = function () {
+
+      }
+
+      this.readings = [];
+    }
+
+    function SensorReading() {
+      this.type = "";
+      this.value = -1;
+
+    }
+
+    // python views wishlist {
+    //    /listNodes :- [12, 13, 14]
+    //    /getSensors/id :- [temperature, light]
+    //
+    // }
+
+    // Data variables
+    var sensorNodes = [];
+
+    window.onLoad = function () {
+      console.log("plots.html ready.");
+    }
+
   </script>
 </div>
 <div class="right" id="sensor_info">
