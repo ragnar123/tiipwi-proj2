@@ -124,15 +124,12 @@ def signup(request):
 
 
 def put_reading(request, node_id, type, value):
-    # :- if authenticated, proceed.
-    # else, throw a 401!
-
     # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
     # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
     # From this, I think I am going to create some subclasses.
-
-    known_types = ['light', 'temperature', 'humidity', 'wind_speed', 'atmospheric_pressure'];
-
+    known_types = ['light', 'temp', 'humidity', 'wind_speed', 'pressure', 'time', 'username', 'password'];
+    # :- if authenticated, proceed.
+    # else, throw a 401!
     try:
         node = SensorNode.objects.get(sensor_id=node_id)
     except SensorNode.DoesNotExist:

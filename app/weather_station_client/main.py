@@ -16,7 +16,7 @@ def __init__(self):
 def main(self):
     while True:
         payload = hat.getTempHumPress()
-        payload = payload + {'time:' + str(datetime.datetime.now())}
+        payload = payload + {'time': str(datetime.datetime.now())}
 
         try:
             com.putReadingToServer(payload)
