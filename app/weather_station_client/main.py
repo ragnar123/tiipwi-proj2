@@ -1,33 +1,38 @@
-import weather_station_client.SenseFromHat
-import weather_station_client.communicateWithServer
+from SenseFromHat import SenseFromHat
+from communicateWithServer import communicateWithServer
 import datetime
 import time
 
 
+REFRESH_RATE = 10
+
 date = ""
 
-def __init__(self):
+def main():
     hat = SenseFromHat()
     com = communicateWithServer()
-    com.getUserPsw()
-    self.date = datetime.date()
+    usrpsw = com.getUserPsw()
+    date = str(datetime.datetime.now().date()) + ".txt"
     fname = open(date, 'w+').close()
 
-def main(self):
     while True:
         payload = hat.getTempHumPress()
-        payload = payload + {'time': str(datetime.datetime.now())}
+        payload["username"] = usrpsw.username
+        payload["password"] = usrpsw.password
+        print payload
 
         try:
             com.putReadingToServer(payload)
-        except Exception:
-            if (!(datetime.date()==self.date)):
-                fname = open(datetime.date(), 'a').close()
-            out_file = open(fname,"a")
-            out_file.write(payload + '\n')
+
+        except Exception as error:
+            print "The call putReadingToServer failed with an exception.", str(error)
+            if (not(str(datetime.datetime.now().date()) + ".txt"==date)):
+                fname = open(str(datetime.datetime.now().date()) + ".txt", 'a').close()
+            out_file = open(date,"a")
+            out_file.write(str(payload))
             out_file.close()
 
-        sleep(REFRESH_RATE)
+        time.sleep(REFRESH_RATE)
 
 if __name__ == "__main__":
     main()
