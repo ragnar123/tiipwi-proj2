@@ -173,10 +173,17 @@ def put_reading(request, node_id):
         time = request.POST.get('time')
         lat = request.POST.get('lat')
         lon = request.POST.get('lon')
-        
-        reading = SensorReading(node=node,
-            timestamp=str(datetime.datetime.now())
 
+        reading = SensorReading(node=node,
+            timestamp=time, #str(datetime.datetime.now()), # Should *maybe* be time
+            # it at least changes some assumptions on the data.
+            temp = temp,
+            pressure = pressure,
+            humidity = humidity,
+            wind_speed = wind_speed,
+            lat = lat,
+            lon = lon,
+            light = light
         )
 
         print request.POST.get('username', 'NOT_AUTHENTICATED')

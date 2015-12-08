@@ -19,6 +19,7 @@ def main():
         payload = hat.getTempHumPress()
         payload["username"] = usrpsw.username
         payload["password"] = usrpsw.password
+        payload["time"] = str(datetime.datetime.now())
         print payload
 
         try:
