@@ -41,10 +41,11 @@ class communicateWithServer(object):
         if(!file):
             sendAuthRequest()
 
-    def putReadingToServer(self):
-        payload = {'key1': 'value1', 'key2': 'value2'}
+    def putReadingToServer(self,payload):
+        payload = payload + {'username': deviceName, 'password': devicePsw}
         rout = requests.post("http://" + ServerIPAddr + "/" + deviceName + "/", data=payload)
         print(r.text)
+        #maybe put a little sleep here?
         rin = requests.get("http://" + ServerIPAddr + "/" + deviceName + "/"
         if (r.status_code==200){
             obj = rin.json()
