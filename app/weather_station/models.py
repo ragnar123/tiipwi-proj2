@@ -3,7 +3,7 @@ import json
 
 class SensorNode(models.Model):
     first_seen = models.DateTimeField('date published')
-    sensor_id = models.IntegerField(default=0)
+    sensor_id = models.CharField(max_length=6,default='STUPID')
     position = models.CharField(max_length=200, default='POSITION NOT AVAILABLE.') # Prefer lat/lng coordinates
 
     def __str__(self):
