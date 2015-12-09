@@ -9,6 +9,10 @@ class SensorNode(models.Model):
     def __str__(self):
         return "Sensor node #%s" % self.sensor_id
 
+    def getNumberOfReadings(self):
+        readings = SensorReading.objects.filter(node=self)
+        return len(readings)
+
 
 
 class SensorReading(models.Model):
