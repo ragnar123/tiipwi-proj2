@@ -2,7 +2,7 @@ from django.db import models
 import json
 
 class SensorNode(models.Model):
-    first_seen = models.DateTimeField('date published')
+    first_seen = models.DateTimeField('date published',default=None, blank=True, null=True)
     sensor_id = models.CharField(max_length=6,default='STUPID')
     position = models.CharField(max_length=200, default='POSITION NOT AVAILABLE.') # Prefer lat/lng coordinates
 

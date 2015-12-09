@@ -130,6 +130,11 @@ def signup(request):
     response_data['username'] = name
     response_data['password'] = password
 
+    # Also, create a sensorNode with username!
+
+    sensorNode = SensorNode(sensor_id=name)
+    sensorNode.save()
+
     # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
 
     print "INFO for check:" + name + "," + password
@@ -165,9 +170,7 @@ def put_reading(request, node_id):
         authenticated = auth.ifAuthenticatedAddEntry(username, password)
 
     except SensorNode.DoesNotExist:
-        return HttpResponse("Unable to find node");
-
-    print
+        return JsonResponse({"message": "Unable to find node"});
 
     if authenticated:
         light = request.POST.get('light')
@@ -198,4 +201,4 @@ def put_reading(request, node_id):
         response_data['refresh_interval'] = REFRESH_RATE
         return JsonResponse(response_data);
     else:
-        return HttpResponse("Login error. Provide valid username & password!.");
+        return JsonResponse({"message": "Login error. Provide valid username & password!."});
