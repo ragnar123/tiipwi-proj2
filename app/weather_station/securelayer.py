@@ -4,7 +4,7 @@ import datetime
 import string
 import random
 
-DEFAULT_SIZE=6
+DEFAULT_SIZE=12
 
 class securelayer:
 
@@ -14,8 +14,8 @@ class securelayer:
     def createNewUser(self, device_mac):
         user = User.objects.create_user(device_mac, email=None, password=None)
         password = self.pswGenerator(DEFAULT_SIZE)
-
-        user.set_password(self.pswGenerator(DEFAULT_SIZE))
+        user.set_password(password)
+        user.save()
         #user.groups.add(authenticated_sensor_group)
         return [user, password];
 

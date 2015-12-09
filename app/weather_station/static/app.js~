@@ -81,20 +81,8 @@ function load() {
       var value = readings[reading].temperature + 50;
       if (value < 0) {value = 0}
       if (value > 100) {value = 100}
-      /*
-      var sum += value;
-      var mean = sum/reading;
-      var base = (value-mean);
-      var tmp = Math.pow(base, 2);
-      var num_var += tmp;
-      var variance = num_var/reading;
-      var std_dev = Math.sqrt(variance);
-      var solution = (sum - mean)/std_dev;
-      console.log(solution); https://en.wikipedia.org/wiki/Feature_scaling#Rescaling
-      */
       value = value / 100;
       console.log(value);
-
 
       var color = f(value).toString();
       console.log(color);
