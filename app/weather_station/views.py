@@ -31,7 +31,16 @@ def getSensorReadings(node_id):
     readings = SensorReading.objects.filter(node_id=node_id)
     out = [];
     for reading in readings:
-        out.append({'timestamp': reading.timestamp, 'type': reading.type, 'value': reading.value });
+        out.append({
+            'timestamp': reading.timestamp,
+            'temp': reading.temp,
+            'pressure' : reading.pressure,
+            'humidity': reading.humidity,
+            'light': reading.light,
+            'wind_speed' : reading.wind_speed,
+            'lat': reading.lat,
+            'lon': reading.lon
+         });
     return out
 
 
@@ -40,6 +49,8 @@ def info(request, node_id):
     response_data = {}
     response_data['sensor_id'] = node_id
 
+    # If the node_id is purely numberical, we might do the SensorNode
+    # else we might have to fetch a user
     resp = SensorNode.objects.filter(sensor_id=node_id)
     if len(resp) == 1:
         node = resp[0]
@@ -111,7 +122,7 @@ def signup(request):
     # The client node is responsible for *saving* the received node_id
     # to persistent memory!!!
     # -> resource directory
-    name = s.pswGenerator(12)
+    name = s.pswGenerator(6)
     # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
     [user, password] = s.createNewUser(name)
 
@@ -119,35 +130,72 @@ def signup(request):
     response_data['username'] = name
     response_data['password'] = password
 
+    # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
+
+    print "INFO for check:" + name + "," + password
+    u = User.objects.get(username = name)
+
     return JsonResponse(response_data);
 
 
+def checkCredentials():
+    return True
 
-def put_reading(request, node_id, type, value):
-    # :- if authenticated, proceed.
-    # else, throw a 401!
 
+from weather_station.authentication import Authentication
+
+auth = Authentication()
+
+
+#from django.views.decorators.csrf import csrf_exempt
+#@csrf_exempt
+def put_reading(request, node_id):
     # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
     # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
     # From this, I think I am going to create some subclasses.
+    known_types = ['light', 'temp', 'humidity', 'wind_speed', 'pressure', 'time', 'username', 'password'];
 
-    known_types = ['light', 'temperature', 'humidity', 'wind_speed', 'atmospheric_pressure'];
-
+    # :- if authenticated, proceed.
+    # else, throw a 401!
     try:
+        username = request.POST.get('username');
+        password = request.POST.get('password');
+
         node = SensorNode.objects.get(sensor_id=node_id)
+        authenticated = auth.ifAuthenticatedAddEntry(username, password)
+
     except SensorNode.DoesNotExist:
         return HttpResponse("Unable to find node");
-    except SensorNode.MultipleObjectsReturned:
-        return HttpResponse("her er heilt galid!");
 
+    print
 
-    if type in frozenset(known_types):
-        reading = SensorReading(node=node, timestamp=str(datetime.datetime.now()))
-        reading.type = type
-        reading.value = value;
+    if authenticated:
+        light = request.POST.get('light')
+        temp =  request.POST.get('temp')
+        pressure = request.POST.get('pressure')
+        humidity = request.POST.get('humidity')
+        wind_speed = request.POST.get('wind_speed')
+        time = request.POST.get('time')
+        lat = request.POST.get('lat')
+        lon = request.POST.get('lon')
+
+        reading = SensorReading(node=node,
+            timestamp=time, #str(datetime.datetime.now()), # Should *maybe* be time
+            # it at least changes some assumptions on the data.
+            temp = temp,
+            pressure = pressure,
+            humidity = humidity,
+            wind_speed = wind_speed,
+            lat = lat,
+            lon = lon,
+            light = light
+        )
+
+        print request.POST.get('username', 'NOT_AUTHENTICATED')
+
         reading.save()
         response_data = {}
         response_data['refresh_interval'] = REFRESH_RATE
         return JsonResponse(response_data);
     else:
-        return HttpResponse("Error with " + type);
+        return HttpResponse("Login error. Provide valid username & password!.");
