@@ -130,6 +130,9 @@ def signup(request):
     response_data['username'] = name
     response_data['password'] = password
 
+    sensorNode = SensorNode(sensor_id=name)
+    sensorNode.save()
+
     # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
 
     print "INFO for check:" + name + "," + password
@@ -165,7 +168,7 @@ def put_reading(request, node_id):
         authenticated = auth.ifAuthenticatedAddEntry(username, password)
 
     except SensorNode.DoesNotExist:
-        return HttpResponse("Unable to find node");
+        return JsonResponse({"message" : "Unable to find node"});
 
     print
 
