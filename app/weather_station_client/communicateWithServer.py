@@ -1,11 +1,9 @@
 import requests
 
-
-ServerIPAddr = "192.168.5.111:8000"
+ServerIPAddr = "192.168.43.188:8000"
 usrPswFilePath = "pw_file.txt"
 
 class communicateWithServer(object):
-
     DEFAULT_REFRESH_RATE = 10
     REFRESH_RATE = 10
     deviceName = ""
@@ -54,7 +52,7 @@ class communicateWithServer(object):
         else:
             print "the exit value " + str(out) + " was fetched from the file"
             return out
-        
+
     def putReadingToServer(self, payload):
 
         url = "http://" + ServerIPAddr + "/put_reading/" + payload["username"] + "/"
@@ -70,7 +68,7 @@ class communicateWithServer(object):
                 print obj
                 if obj['refresh_interval']:
                     self.REFRESH_RATE = obj['refresh_interval']
-                    print "New refresh rate is: " + REFRESH_RATE + " default is: " + DEFAULT_REFRESH_RATE
+                    print "New refresh rate is: " + str(self.REFRESH_RATE) + " default is: " + str(self.DEFAULT_REFRESH_RATE)
             except Exception as error:
                 print "Exception thrown in putReadingToServer() ", str(Exception), str(error)
         else:
