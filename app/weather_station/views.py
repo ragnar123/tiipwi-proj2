@@ -122,13 +122,18 @@ def signup(request):
     # The client node is responsible for *saving* the received node_id
     # to persistent memory!!!
     # -> resource directory
-    name = s.pswGenerator(12)
+    name = s.pswGenerator(6)
     # check if the newly, randomly generated name is UNIQUE! regenerate, if not.
     [user, password] = s.createNewUser(name)
 
     response_data = {}
     response_data['username'] = name
     response_data['password'] = password
+
+    # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
+
+    print "INFO for check:" + name + "," + password
+    u = User.objects.get(username = name)
 
     return JsonResponse(response_data);
 
