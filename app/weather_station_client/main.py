@@ -3,9 +3,6 @@ from communicateWithServer import communicateWithServer
 import datetime
 import time
 
-
-REFRESH_RATE = 10
-
 date = ""
 
 def main():
@@ -20,10 +17,6 @@ def main():
         payload["username"] = usrpsw["username"]
         payload["password"] = usrpsw["password"]
         payload["time"] = str(datetime.datetime.now())
-        payload["lat"] = -1
-        payload["lon"] = -1
-        payload["light"] = -1
-        payload["wind_speed"] = -1
         print payload
 
         try:
@@ -37,7 +30,7 @@ def main():
             out_file.write(str(payload))
             out_file.close()
 
-        time.sleep(REFRESH_RATE)
+        time.sleep(com.REFRESH_RATE)
 
 if __name__ == "__main__":
     main()
