@@ -67,10 +67,12 @@
     // it seems to be possible to install it on the RPi: https://rethinkdb.com/docs/install/raspbian/
 
     function SensorNode(obj) {
-      this.id = obj.sensor_id || "";
+      this.id = obj.sensor_id;
+      this.obj = obj;
       this.position = obj.position;
       this.sensorDesc = "not defined yet";
       this.display = function () {
+        console.log("Display node " + this.id);
         // grab the UI container. Append whatever graphs you can produce to bottom of page.
       }
       this.sensors = {};
@@ -78,7 +80,9 @@
         var str = "";
         for (prop in this.sensors) {
           if (this.sensors.hasOwnProperty(prop)) {
-            str += " has sensor " + prop + " : " + this.readings.filter(function (e) { return e.type == prop; }).length  + ". \n";
+            str += " has sensor " + prop + " : " + this.readings.filter(function (e) {
+              return e.type == prop;
+            }).length  + ". \n";
           }
         }
         return str;
@@ -105,35 +109,23 @@
           var sensor = "temperature";
           var node = sensorNodes[0];
 
-        plotGraph(
+          plotGraph(
           this.readings
             //.filter(function (r) {return (r.type == sensor); })
             .map(function (e) { return { x: e.timestamp, y: e.value, group: ((e.type == "light") ? 1 : 0 )}; }),
-          node.sensors[sensor].firstTimestamp,
-          node.sensors[sensor].lastTimestamp
-        );
-      }.bind(this), 0)
-
+            node.sensors[sensor].firstTimestamp,
+            node.sensors[sensor].lastTimestamp
+          );
+        }.bind(this), 0); // after a really short instant, plot the graph
       };
 
       this.display();
     }
     function initNode(node) {
-      console.log("it seems that you are undefined", node);
-      get('/info/' + node.sensor_id + '/', function (httpResult) {
+      get('/info/' + node.id + '/', function (httpResult) {
         console.log(httpResult);
         // node.init.bind(node));
       });
-    }
-
-
-    function SensorNode() {
-      this.id = "";
-      this.display = function () {
-
-      }
-
-      this.readings = [];
     }
 
     function SensorReading() {
@@ -161,9 +153,11 @@
     function step2(nodeIds) {
       console.log("plot", nodeIds);
       nodeIds.forEach(function (node) {
-        sensorNodes.push(new SensorNode(node));
+        var newNode = new SensorNode(node);
+        sensorNodes.push(newNode);
+
+        initNode(newNode);
       });
-      sensorNodes.forEach(initNode.bind(this));
 
     }
 

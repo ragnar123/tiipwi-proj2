@@ -55,7 +55,8 @@ function load() {
   var MyComponent = Vue.extend({
     props: ['sensorId', 'msg'],
     template: '<h1>NODE: {{ heading }}</h1><p>{{ msg }}</p>'
-  })
+  });
+
   Vue.component('weather-information', MyComponent);
   new Vue({
     el: '#sensor_info'
