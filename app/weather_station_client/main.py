@@ -17,9 +17,13 @@ def main():
 
     while True:
         payload = hat.getTempHumPress()
-        payload["username"] = usrpsw.username
-        payload["password"] = usrpsw.password
+        payload["username"] = usrpsw["username"]
+        payload["password"] = usrpsw["password"]
         payload["time"] = str(datetime.datetime.now())
+        payload["lat"] = -1
+        payload["lon"] = -1
+        payload["light"] = -1
+        payload["wind_speed"] = -1
         print payload
 
         try:
