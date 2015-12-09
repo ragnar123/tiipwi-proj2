@@ -15,7 +15,7 @@ from weather_station.models import SensorReading
 
 from weather_station.securelayer import securelayer
 
-REFRESH_RATE = 10000
+REFRESH_RATE = 10
 # Main page. Shows map & list of nodes
 def index(request):
     template = loader.get_template('index.html')
@@ -84,14 +84,14 @@ def plots(request, node_id):
     nodes = SensorNode.objects.get(sensor_id=node_id)
     sensors = []
     #print "serving node" + node_id # nodeid is 6char str
-#    readings = SensorReading.objects.filter(node_id=nodes.id)
+    readings = SensorReading.objects.filter(node_id=nodes.id)
 
     # The problem is that nothing in SensorReading table refers 'back' to 6 char ids ... TODO !!!
 
     context = RequestContext(request, {
         'sensors': sensors,
         'sensor_id': node_id,
-#        'readings': getSensorReadings(node_id)
+        'readings': getSensorReadings(node_id)
     })
     return HttpResponse(template.render(context))
 

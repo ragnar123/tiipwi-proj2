@@ -92,31 +92,21 @@
       this.init = function (obj) {
         this.readings = obj.readings;
         obj.readings.forEach(function (r) {
-          if (this.sensors[r.type] === undefined) {
-            this.sensors[r.type] = {defined: "true"};
-            this.sensors[r.type].firstTimestamp = r.timestamp;
-            this.sensors[r.type].lastTimestamp = r.timestamp;
-          }
-          this.sensors[r.type].firstTimestamp = Math.min(r.timestamp, this.sensors[r.type].firstTimestamp) ? r.timestamp : this.sensors[r.type].firstTimestamp;
-          this.sensors[r.type].lastTimestamp = Math.max(r.timestamp, this.sensors[r.type].lastTimestamp) ? this.sensors[r.type].lastTimestamp : r.timestamp;
-
+          console.log(r.temp)
         }.bind(this));
+
         this.sensorDesc = this.getSensorDescription();
 
-        console.log("Sensor node#", this.id, this);
-
-        setTimeout(function () {
           var sensor = "temperature";
           var node = sensorNodes[0];
 
           plotGraph(
-          this.readings
+            this.readings
             //.filter(function (r) {return (r.type == sensor); })
-            .map(function (e) { return { x: e.timestamp, y: e.value, group: ((e.type == "light") ? 1 : 0 )}; }),
-            node.sensors[sensor].firstTimestamp,
-            node.sensors[sensor].lastTimestamp
+            .map(function (e) { return { x: e.timestamp, y: e.temp, group: 1 }; }),
+            "2015-12-09",
+            "2015-12-10"
           );
-        }.bind(this), 0); // after a really short instant, plot the graph
       };
 
       this.display();
@@ -124,7 +114,7 @@
     function initNode(node) {
       get('/info/' + node.id + '/', function (httpResult) {
         console.log(httpResult);
-        // node.init.bind(node));
+        node.init(httpResult)
       });
     }
 
@@ -184,6 +174,7 @@
     function plotGraph(items, start, end) {
         var container = document.getElementById('visualization');
         var dataset = new vis.DataSet(items);
+        console.log("About to plot", dataset);
 
         var names = ['light', 'temperature'];
         var groups = new vis.DataSet();
@@ -201,7 +192,7 @@
 
           groups.add({
               id: 1,
-              content: names[1],
+              content: 'Temperature',
               options: {
                 drawPoints: { style: 'circle' },
                 shaded: {

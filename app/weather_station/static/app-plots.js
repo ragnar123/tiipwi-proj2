@@ -51,7 +51,6 @@ function hideWindow() {
 
 
 function load() {
-
   var MyComponent = Vue.extend({
     props: ['sensorId', 'msg'],
     template: '<h1>NODE: {{ heading }}</h1><p>{{ msg }}</p>'
