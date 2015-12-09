@@ -1,0 +1,25 @@
+
+.marker {
+  width: 240px;
+}
+
+.right {
+  width: 500px;
+  float: right;
+
+}
+.left {
+  width: 666px;
+  float: left;
+}
+
+#infoWindow {
+  visibility: hidden;
+}
+
+weather-information {
+  width: 100px;
+  height: 100px;
+  background: red;
+  float: left;
+}
