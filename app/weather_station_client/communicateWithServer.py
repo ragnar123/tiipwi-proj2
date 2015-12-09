@@ -1,27 +1,29 @@
 import requests
 
-DEFAULT_REFRESH_RATE = 10
-REFRESH_RATE = 10
+
 ServerIPAddr = "192.168.5.111:8000"
 usrPswFilePath = "pw_file.txt"
-deviceName = ""
-devicePsw = ""
 
 class communicateWithServer(object):
+
+    DEFAULT_REFRESH_RATE = 10
+    REFRESH_RATE = 10
+    deviceName = ""
+    devicePsw = ""
 
     def sendAuthRequest(self):
         r = requests.get('http://' + ServerIPAddr + '/signup')
         if (r.status_code==200):
             obj = r.json()
-            deviceName = obj['username']
-            devicePsw = obj['password']
+            self.deviceName = obj['username']
+            self.devicePsw = obj['password']
             try:
-                self.writeFile(obj['username'], obj['password'])
+                self.writeFile(self.deviceName, self.devicePsw)
                 print "user and password have been written into a file"
             except Exception as e:
                 print "Unable to write to file, error: " + str(e)
                 pass
-            return {'username':deviceName, 'password':devicePsw}
+            return {'username':self.deviceName, 'password':self.devicePsw}
         else:
             print('page unavailable, unable to fetch user and pass, try again later')
 
@@ -35,9 +37,9 @@ class communicateWithServer(object):
             data=file.read()
             if len(data.split("\n")) < 2:
                 return ""
-            deviceName = data.split("\n")[0].split(":")[1]
-            devicePsw = data.split("\n")[1].split(":")[1]
-        return {'username':deviceName, 'password':devicePsw}
+            self.deviceName = data.split("\n")[0].split(":")[1]
+            self.devicePsw = data.split("\n")[1].split(":")[1]
+        return {'username':self.deviceName, 'password':self.devicePsw}
 
     def getUserPsw(self):
         auth = False
@@ -55,17 +57,21 @@ class communicateWithServer(object):
         
     def putReadingToServer(self, payload):
 
-        url = "http://" + ServerIPAddr + "/put_reading/" + deviceName +"/"
+        url = "http://" + ServerIPAddr + "/put_reading/" + payload["username"] + "/"
         rout = requests.post(url, data=payload)
-        print(rout.text)       
+        print url
+        print(rout.text)
+        print self.deviceName
+        print self.devicePsw
 
         if rout.status_code == 200:
             try:
                 obj = rout.json()
-                REFRESH_RATE= obj['refresh_interval']
-                print "New refresh rate is: " + REFRESH_RATE + " default is: " + DEFAULT_REFRESH_RATE
+                print obj
+                if obj['refresh_interval']:
+                    self.REFRESH_RATE = obj['refresh_interval']
+                    print "New refresh rate is: " + REFRESH_RATE + " default is: " + DEFAULT_REFRESH_RATE
             except Exception as error:
                 print "Exception thrown in putReadingToServer() ", str(Exception), str(error)
         else:
-            REFRESH_RATE = DEFAULT_REFRESH_RATE
-
+            self.REFRESH_RATE = self.DEFAULT_REFRESH_RATE

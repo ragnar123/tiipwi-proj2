@@ -172,6 +172,7 @@ def put_reading(request, node_id):
     except SensorNode.DoesNotExist:
         return JsonResponse({"message": "Unable to find node"});
 
+
     if authenticated:
         light = request.POST.get('light')
         temp =  request.POST.get('temp')
