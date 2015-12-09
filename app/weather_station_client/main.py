@@ -3,9 +3,6 @@ from communicateWithServer import communicateWithServer
 import datetime
 import time
 
-
-REFRESH_RATE = 10
-
 date = ""
 
 def main():
@@ -41,3 +38,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
