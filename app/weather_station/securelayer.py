@@ -18,6 +18,3 @@ class securelayer:
         user.save()
         #user.groups.add(authenticated_sensor_group)
         return [user, password];
-
-    def checkPassword (self, raw_password):
-        return check_password(raw_password)

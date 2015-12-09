@@ -79,17 +79,19 @@ def list(request):
 
 
 # View to show graphs of the recieved data for a node
-def plot(request, node_id):
+def plots(request, node_id):
     template = loader.get_template('plots.html')
     nodes = SensorNode.objects.get(sensor_id=node_id)
     sensors = []
+    #print "serving node" + node_id # nodeid is 6char str
+#    readings = SensorReading.objects.filter(node_id=nodes.id)
 
-    readings = SensorReading.objects.filter(node_id=node_id)
+    # The problem is that nothing in SensorReading table refers 'back' to 6 char ids ... TODO !!!
 
     context = RequestContext(request, {
         'sensors': sensors,
         'sensor_id': node_id,
-        'readings': getSensorReadings(node_id)
+#        'readings': getSensorReadings(node_id)
     })
     return HttpResponse(template.render(context))
 
@@ -143,9 +145,6 @@ def signup(request):
     return JsonResponse(response_data);
 
 
-def checkCredentials():
-    return True
-
 
 from weather_station.authentication import Authentication
 
@@ -172,8 +171,7 @@ def put_reading(request, node_id):
     except SensorNode.DoesNotExist:
         return JsonResponse({"message": "Unable to find node"});
 
-
-    if authenticated:
+    if authenticated is True:
         light = request.POST.get('light')
         temp =  request.POST.get('temp')
         pressure = request.POST.get('pressure')
@@ -183,7 +181,9 @@ def put_reading(request, node_id):
         lat = request.POST.get('lat')
         lon = request.POST.get('lon')
 
-        reading = SensorReading(node=node,
+        reading = SensorReading(
+            # node=node,
+            node_id=request.POST.get('username'),
             timestamp=time, #str(datetime.datetime.now()), # Should *maybe* be time
             # it at least changes some assumptions on the data.
             temp = temp,

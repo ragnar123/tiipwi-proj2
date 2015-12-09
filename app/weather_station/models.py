@@ -25,3 +25,4 @@ class SensorReading(models.Model):
     wind_speed = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
     lat = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
     lon = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
+    username = models.CharField(max_length=6)
