@@ -1,16 +1,16 @@
-from SenseFromHat import SenseFromHat
-from communicateWithServer import communicateWithServer
+"""Python program to be run on the RPi with SenseHat."""
 import datetime
 import time
-
-date = ""
+from SenseFromHat import SenseFromHat
+from communicateWithServer import communicateWithServer
 
 def main():
+    """Sensor program, running in infinite loop"""
     hat = SenseFromHat()
     com = communicateWithServer()
     usrpsw = com.getUserPsw()
     date = str(datetime.datetime.now().date()) + ".txt"
-    fname = open(date, 'w+').close()
+    open(date, 'w+').close()
 
     while True:
         payload = hat.getTempHumPress()
@@ -24,9 +24,9 @@ def main():
 
         except Exception as error:
             print "The call putReadingToServer failed with an exception.", str(error)
-            if (not(str(datetime.datetime.now().date()) + ".txt"==date)):
-                fname = open(str(datetime.datetime.now().date()) + ".txt", 'a').close()
-            out_file = open(date,"a")
+            if str(datetime.datetime.now().date()) + ".txt" != date:
+                open(str(datetime.datetime.now().date()) + ".txt", 'a').close()
+            out_file = open(date, "a")
             out_file.write(str(payload))
             out_file.close()
 

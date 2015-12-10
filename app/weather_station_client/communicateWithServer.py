@@ -13,7 +13,7 @@ class communicateWithServer(object):
 
     def sendAuthRequest(self):
         r = requests.get('http://' + ServerIPAddr + '/signup')
-        if (r.status_code==200):
+        if r.status_code == 200:
             obj = r.json()
             self.deviceName = obj['username']
             self.devicePsw = obj['password']
@@ -25,16 +25,16 @@ class communicateWithServer(object):
                 pass
             return {'username':self.deviceName, 'password':self.devicePsw}
         else:
-            print('page unavailable, unable to fetch user and pass, try again later')
+            print 'page unavailable, unable to fetch user and pass, try again later'
 
     def writeFile(self, deviceName, devicePsw):
-        out_file = open(usrPswFilePath,"w+")
+        out_file = open(usrPswFilePath, "w+")
         out_file.write("username:" + deviceName + "\n" + "password:" + devicePsw)
         out_file.close()
 
     def readFile(self):
-        with open (usrPswFilePath, "r") as file:
-            data=file.read()
+        with open(usrPswFilePath, "r") as file:
+            data = file.read()
             if len(data.split("\n")) < 2:
                 return ""
             self.deviceName = data.split("\n")[0].split(":")[1]
@@ -54,13 +54,13 @@ class communicateWithServer(object):
         else:
             print "the exit value " + str(out) + " was fetched from the file"
             return out
-        
+
     def putReadingToServer(self, payload):
 
         url = "http://" + ServerIPAddr + "/put_reading/" + payload["username"] + "/"
         rout = requests.post(url, data=payload)
         print url
-        print(rout.text)
+        print rout.text
         print self.deviceName
         print self.devicePsw
 
