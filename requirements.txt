@@ -24,7 +24,6 @@ openpyxl==2.2.0b1
 Pillow==3.0.0
 py2app==0.7.3
 pycparser==2.12
-pyobjc-core==2.5.1
 pyOpenSSL==0.13.1
 pyparsing==2.0.1
 python-dateutil==2.2
