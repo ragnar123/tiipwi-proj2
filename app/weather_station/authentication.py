@@ -1,12 +1,14 @@
-from django.contrib.auth.models import User
-from weather_station.models import SensorNode
 import datetime
 import string
 import random
 
-DEFAULT_SIZE=6
+from django.contrib.auth.models import User
+from weather_station.models import SensorNode
+
+DEFAULT_SIZE = 6
 
 class Authentication:
+    """ Provides functions for authentication. """
     def psw_generator(psw_size, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(psw_size))
 
@@ -23,7 +25,7 @@ class Authentication:
         print user_id
         try:
             user = User.objects.get(username=user_id)
-            print ("CHECKING USER " + user_id + ". IF PW " + raw_password + " is valid..");
+            print ("CHECKING USER " + user_id + ". IF PW " + raw_password + " is valid..")
             if user.check_password(raw_password):
                 print "We were able to authenticate you."
                 print "need to initialize a SensorNode with id as yours"
@@ -31,7 +33,7 @@ class Authentication:
                 if not sn:
                     print "not found. creating"
                     sn = SensorNode(sensor_id = user_id)
-                    sn.save();
+                    sn.save()
 
                 return True
 

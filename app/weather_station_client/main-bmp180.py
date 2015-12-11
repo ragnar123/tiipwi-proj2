@@ -1,21 +1,27 @@
-"""Python program to be run on the RPi with SenseHat."""
+"""Python program to be run on the RPi with BMP180 sensor."""
 import datetime
 import time
-from SenseFromHat import SenseFromHat
+
+import Adafruit_BMP.BMP085 as BMP085
 from communicateWithServer import communicateWithServer
+
 
 def main():
     """Sensor program, running in infinite loop"""
-    hat = SenseFromHat()
+    sensor = BMP085.BMP085()
     com = communicateWithServer()
-    usrpsw = com.getUserPsw()
+    com.getUserPsw()
     date = str(datetime.datetime.now().date()) + ".txt"
     open(date, 'w+').close()
 
     while True:
-        payload = hat.getTempHumPress()
-        payload["username"] = usrpsw["username"]
-        payload["password"] = usrpsw["password"]
+        payload = {}
+        payload['temp'] = sensor.read_temperature()
+        payload['pressure'] = sensor.read_pressure()
+        payload['altitude'] = sensor.read_altitude()
+        payload['sealevel_pressure'] = sensor.read_sealevel_pressure()
+        payload["username"] = com.deviceName
+        payload["password"] = com.devicePsw
         payload["time"] = str(datetime.datetime.now())
         print payload
 
