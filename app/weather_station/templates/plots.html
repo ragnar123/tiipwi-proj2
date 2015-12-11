@@ -6,17 +6,18 @@
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body onload="load()">
-  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing"></script>
   <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.css"></link>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.js"></script>
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing"></script>
+
   <script type="text/javascript" src="{% static 'util.js' %}"></script>
-  <script type="text/javascript" src="{% static 'app.js' %}"></script>
+  <script type="text/javascript" src="{% static 'app-plots.js' %}"></script>
 
   <div class="left">
 
   <div id="list">
     <h1>Sensor {{ sensor_id }}</h1>
-
-
     {% if sensor_list %}
       <ul>
       {% for sensor in sensor_list %}
@@ -24,9 +25,27 @@
       {% endfor %}
       </ul>
     {% else %}
+      <div id="sensors">
+        <ul>
+          <li v-for="sensor in nodes">
+            <span>
+              {% verbatim %}
+                {{ sensor.id }}, readings: {{ sensor.readings.length }}
+                <br> reading types: {{ sensor.sensorDesc }}
+                {% endverbatim %}
+
+            </span>
+          </li>
+        </ul>
+        {% verbatim %}
+          {{ sensor_list }}
+        {% endverbatim %}
+      </div>
+
       <p>No sensors are available.</p>
     {% endif %}
   </div>
+  <div id="visualization"></div>
 
 
 
@@ -47,13 +66,56 @@
     // ANd eventually you will replace the sqlite implementation with rethinkdb
     // it seems to be possible to install it on the RPi: https://rethinkdb.com/docs/install/raspbian/
 
-    function SensorNode() {
-      this.id = "";
+    function SensorNode(obj) {
+      this.id = obj.sensor_id;
+      this.obj = obj;
+      this.position = obj.position;
+      this.sensorDesc = "not defined yet";
       this.display = function () {
-
+        console.log("Display node " + this.id);
+        // grab the UI container. Append whatever graphs you can produce to bottom of page.
+      }
+      this.sensors = {};
+      this.getSensorDescription = function () {
+        var str = "";
+        for (prop in this.sensors) {
+          if (this.sensors.hasOwnProperty(prop)) {
+            str += " has sensor " + prop + " : " + this.readings.filter(function (e) {
+              return e.type == prop;
+            }).length  + ". \n";
+          }
+        }
+        return str;
       }
 
-      this.readings = [];
+      this.readings = obj.readings || [];
+      this.init = function (obj) {
+        this.readings = obj.readings;
+        obj.readings.forEach(function (r) {
+          console.log(r.temp)
+        }.bind(this));
+
+        this.sensorDesc = this.getSensorDescription();
+
+          var sensor = "temperature";
+          var node = sensorNodes[0];
+
+          plotGraph(
+            this.readings
+            //.filter(function (r) {return (r.type == sensor); })
+            .map(function (e) { return { x: e.timestamp, y: e.temp, group: 1 }; }),
+            "2015-12-09",
+            "2015-12-10"
+          );
+      };
+
+      this.display();
+    }
+    function initNode(node) {
+      get('/info/' + node.id + '/', function (httpResult) {
+        console.log(httpResult);
+        node.init(httpResult)
+      });
     }
 
     function SensorReading() {
@@ -71,8 +133,78 @@
     // Data variables
     var sensorNodes = [];
 
-    window.onLoad = function () {
+    function getSensorDescription() {
+      var str = "Sensors found: ";
+      sensorNodes.forEach(function (sn) {
+        str += "ID: "+ sn.id + ". sensors: " + JSON.stringify(sn.sensors) + ". \n";
+      });
+      return str;
+    }
+    function step2(nodeIds) {
+      console.log("plot", nodeIds);
+      nodeIds.forEach(function (node) {
+        var newNode = new SensorNode(node);
+        sensorNodes.push(newNode);
+
+        initNode(newNode);
+      });
+
+    }
+
+
+    window.onload = function () {
       console.log("plots.html ready.");
+      //get('/list', step2);
+      step2([{ sensor_id : "{{ sensor_id }}" }]);
+
+      // Use vue.js bindings. refer to tutorial.
+      console.log("Initializing VUE!");
+      new Vue({
+        el: "#sensors",
+        data: {
+          nodes: sensorNodes,
+          sensor_list: getSensorDescription()
+        }
+
+      })
+    }
+
+    var items = [];
+
+    function plotGraph(items, start, end) {
+        var container = document.getElementById('visualization');
+        var dataset = new vis.DataSet(items);
+        console.log("About to plot", dataset);
+
+        var names = ['light', 'temperature'];
+        var groups = new vis.DataSet();
+        groups.add({
+            id: 0,
+            content: names[0],
+            options: {
+              drawPoints: {
+                style: 'square' // square, circle
+              },
+              shaded: {
+                orientation: 'bottom' // top, bottom
+              }
+          }});
+
+          groups.add({
+              id: 1,
+              content: 'Temperature',
+              options: {
+                drawPoints: { style: 'circle' },
+                shaded: {
+                  orientation: 'bottom' // top, bottom
+                }
+        }});
+
+        var options = {
+            start: start,
+            end: end
+        };
+        var graph2d = new vis.Graph2d(container, dataset, groups, options);
     }
 
   </script>

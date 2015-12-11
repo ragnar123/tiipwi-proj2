@@ -1,9 +1,10 @@
 from django.db import models
-import json
 
 class SensorNode(models.Model):
-    first_seen = models.DateTimeField('date published')
-    sensor_id = models.CharField(max_length=6,default='STUPID')
+    """ Sensor Node """
+    first_seen = models.DateTimeField('date published', default=None, blank=True, null=True)
+    sensor_id = models.CharField(max_length=6, default='STUPID', unique=True)
+
     position = models.CharField(max_length=200, default='POSITION NOT AVAILABLE.') # Prefer lat/lng coordinates
 
     def __str__(self):
@@ -14,14 +15,14 @@ class SensorNode(models.Model):
         return len(readings)
 
 
-
 class SensorReading(models.Model):
-    node = models.ForeignKey(SensorNode, default=-1)
+    """ Sensor Reading """
+    node = models.ForeignKey(SensorNode, to_field='sensor_id')
     timestamp = models.DateTimeField('date published') # stamped at db insertion *OR* timestamped at creation time.
-    light = models.DecimalField(default=-1, max_digits=8,decimal_places=2) # I have *NO* idea what reasonable defaults are. please fix/improve
-    temp = models.CharField(max_length=30, default='UNDEFINED')
-    humidity = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
-    pressure = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
-    wind_speed = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
-    lat = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
-    lon = models.DecimalField(default=-1, max_digits=8, decimal_places=2)
+    light = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True) # I have *NO* idea what reasonable defaults are. please fix/improve
+    temp = models.CharField(max_length=30, default='UNDEFINED', blank=True, null=True)
+    humidity = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
+    pressure = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
+    wind_speed = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
+    lat = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
+    lon = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
