@@ -1,14 +1,12 @@
+""" Django Views """
+import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib.auth.models import User
-
-import datetime
-import string
-import random
-import json
 
 from weather_station.models import SensorNode
 from weather_station.models import SensorReading
@@ -29,7 +27,7 @@ def index(request):
 
 def getSensorReadings(node_id):
     readings = SensorReading.objects.filter(node_id=node_id)
-    out = [];
+    out = []
     for reading in readings:
         out.append({
             'timestamp': reading.timestamp,
@@ -39,8 +37,7 @@ def getSensorReadings(node_id):
             'light': reading.light,
             'wind_speed' : reading.wind_speed,
             'lat': reading.lat,
-            'lon': reading.lon
-         });
+            'lon': reading.lon})
     return out
 
 
@@ -62,7 +59,7 @@ def info(request, node_id):
 
     return JsonResponse(response_data)
 
-def list(request):
+def node_list():
     response_data = []
 
     nodes = SensorNode.objects.all()
@@ -82,11 +79,10 @@ def list(request):
 def plots(request, node_id):
     template = loader.get_template('plots.html')
     nodes = SensorNode.objects.get(sensor_id=node_id)
+
     sensors = []
-    #print "serving node" + node_id # nodeid is 6char str
     readings = SensorReading.objects.filter(node_id=nodes.id)
 
-    # The problem is that nothing in SensorReading table refers 'back' to 6 char ids ... TODO !!!
 
     context = RequestContext(request, {
         'sensors': sensors,
@@ -101,12 +97,12 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
     try:
         node = SensorNode.objects.get(sensor_id=user_id)
     except SensorNode.DoesNotExist:
-        return HttpResponse("Unable to find node");
+        return HttpResponse("Unable to find node")
     except SensorNode.MultipleObjectsReturned:
-        return HttpResponse("her er heilt galid!");
+        return HttpResponse("Should never occur!")
 
     if securelayer.checkPassword(raw_password):
-        new_entry = SensorReading(node_id=user_id , timestamp= str(datetime.datetime.now()))
+        new_entry = SensorReading(node_id=user_id, timestamp=str(datetime.datetime.now()))
         new_entry.save()
     else:
         return "sorry wrong password"
@@ -115,8 +111,8 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
 
 
 @transaction.atomic
-def signup(request):
-    resp = "The idea is that this will return a new nodeid & key."
+def signup():
+    """The idea is that this will return a new nodeid & key."""
     s = securelayer()
     # The master controller will create a new, unique name for connecting nodes.
     # If, and only if, the nodes have not connected before.
@@ -133,16 +129,15 @@ def signup(request):
     response_data['password'] = password
 
     # Also, create a sensorNode with username!
-
-    sensorNode = SensorNode(sensor_id=name)
-    sensorNode.save()
+    sensor_node = SensorNode(sensor_id=name)
+    sensor_node.save()
 
     # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
 
     print "INFO for check:" + name + "," + password
-    u = User.objects.get(username = name)
+    u = User.objects.get(username=name)
 
-    return JsonResponse(response_data);
+    return JsonResponse(response_data)
 
 
 
@@ -157,23 +152,23 @@ def put_reading(request, node_id):
     # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
     # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
     # From this, I think I am going to create some subclasses.
-    known_types = ['light', 'temp', 'humidity', 'wind_speed', 'pressure', 'time', 'username', 'password'];
+    known_types = ['light', 'temp', 'humidity', 'wind_speed', 'pressure', 'time', 'username', 'password']
 
     # :- if authenticated, proceed.
     # else, throw a 401!
     try:
-        username = request.POST.get('username');
-        password = request.POST.get('password');
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         node = SensorNode.objects.get(sensor_id=node_id)
         authenticated = auth.ifAuthenticatedAddEntry(username, password)
 
     except SensorNode.DoesNotExist:
-        return JsonResponse({"message": "Unable to find node"});
+        return JsonResponse({"message": "Unable to find node"})
 
     if authenticated is True:
         light = request.POST.get('light')
-        temp =  request.POST.get('temp')
+        temp = request.POST.get('temp')
         pressure = request.POST.get('pressure')
         humidity = request.POST.get('humidity')
         wind_speed = request.POST.get('wind_speed')
@@ -186,13 +181,13 @@ def put_reading(request, node_id):
             node_id=request.POST.get('username'),
             timestamp=time, #str(datetime.datetime.now()), # Should *maybe* be time
             # it at least changes some assumptions on the data.
-            temp = temp,
-            pressure = pressure,
-            humidity = humidity,
-            wind_speed = wind_speed,
-            lat = lat,
-            lon = lon,
-            light = light
+            temp=temp,
+            pressure=pressure,
+            humidity=humidity,
+            wind_speed=wind_speed,
+            lat=lat,
+            lon=lon,
+            light=light
         )
 
         print request.POST.get('username', 'NOT_AUTHENTICATED')
@@ -200,6 +195,6 @@ def put_reading(request, node_id):
         reading.save()
         response_data = {}
         response_data['refresh_interval'] = REFRESH_RATE
-        return JsonResponse(response_data);
+        return JsonResponse(response_data)
     else:
-        return JsonResponse({"message": "Login error. Provide valid username & password!."});
+        return JsonResponse({"message": "Login error. Provide valid username & password!."})

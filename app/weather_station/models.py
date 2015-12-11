@@ -1,9 +1,9 @@
 from django.db import models
-import json
 
 class SensorNode(models.Model):
-    first_seen = models.DateTimeField('date published',default=None, blank=True, null=True)
-    sensor_id = models.CharField(max_length=6,default='STUPID',unique=True)
+    """ Sensor Node """
+    first_seen = models.DateTimeField('date published', default=None, blank=True, null=True)
+    sensor_id = models.CharField(max_length=6, default='STUPID', unique=True)
 
     position = models.CharField(max_length=200, default='POSITION NOT AVAILABLE.') # Prefer lat/lng coordinates
 
@@ -15,12 +15,12 @@ class SensorNode(models.Model):
         return len(readings)
 
 
-
 class SensorReading(models.Model):
+    """ Sensor Reading """
     node = models.ForeignKey(SensorNode, to_field='sensor_id')
     timestamp = models.DateTimeField('date published') # stamped at db insertion *OR* timestamped at creation time.
-    light = models.DecimalField(default=-1, max_digits=8,decimal_places=2, blank=True, null=True) # I have *NO* idea what reasonable defaults are. please fix/improve
-    temp = models.CharField(max_length=30, default='UNDEFINED',blank=True, null=True)
+    light = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True) # I have *NO* idea what reasonable defaults are. please fix/improve
+    temp = models.CharField(max_length=30, default='UNDEFINED', blank=True, null=True)
     humidity = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
     pressure = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)
     wind_speed = models.DecimalField(default=-1, max_digits=8, decimal_places=2, blank=True, null=True)

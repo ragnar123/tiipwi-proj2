@@ -1,24 +1,25 @@
-from communicateWithServer import communicateWithServer
-import Adafruit_BMP.BMP085 as BMP085
+"""Python program to be run on the RPi with BMP180 sensor."""
 import datetime
 import time
 
-date = ""
+import Adafruit_BMP.BMP085 as BMP085
+from communicateWithServer import communicateWithServer
+
 
 def main():
+    """Sensor program, running in infinite loop"""
     sensor = BMP085.BMP085()
     com = communicateWithServer()
-    usrpsw = com.getUserPsw()
-    print usrpsw
+    com.getUserPsw()
     date = str(datetime.datetime.now().date()) + ".txt"
-    fname = open(date, 'w+').close()
+    open(date, 'w+').close()
 
     while True:
-        payload = {
-                'temp': sensor.read_temperature(),
-                'pressure': sensor.read_pressure(),
-                'altitude': sensor.read_altitude(),
-                'sealevel_pressure': sensor.read_sealevel_pressure() };
+        payload = {}
+        payload['temp'] = sensor.read_temperature()
+        payload['pressure'] = sensor.read_pressure()
+        payload['altitude'] = sensor.read_altitude()
+        payload['sealevel_pressure'] = sensor.read_sealevel_pressure()
         payload["username"] = com.deviceName
         payload["password"] = com.devicePsw
         payload["time"] = str(datetime.datetime.now())
@@ -29,9 +30,9 @@ def main():
 
         except Exception as error:
             print "The call putReadingToServer failed with an exception.", str(error)
-            if (not(str(datetime.datetime.now().date()) + ".txt"==date)):
-                fname = open(str(datetime.datetime.now().date()) + ".txt", 'a').close()
-            out_file = open(date,"a")
+            if str(datetime.datetime.now().date()) + ".txt" != date:
+                open(str(datetime.datetime.now().date()) + ".txt", 'a').close()
+            out_file = open(date, "a")
             out_file.write(str(payload))
             out_file.close()
 
