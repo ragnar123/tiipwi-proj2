@@ -1,4 +1,6 @@
-import datetime
+"""
+Authentication module
+"""
 import string
 import random
 
@@ -25,15 +27,15 @@ class Authentication:
         print user_id
         try:
             user = User.objects.get(username=user_id)
-            print ("CHECKING USER " + user_id + ". IF PW " + raw_password + " is valid..")
+            print "CHECKING USER " + user_id + ". IF PW " + raw_password + " is valid.."
             if user.check_password(raw_password):
                 print "We were able to authenticate you."
                 print "need to initialize a SensorNode with id as yours"
-                sn = SensorNode.objects.get(sensor_id = user_id)
-                if not sn:
+                sensor_node = SensorNode.objects.get(sensor_id=user_id)
+                if not sensor_node:
                     print "not found. creating"
-                    sn = SensorNode(sensor_id = user_id)
-                    sn.save()
+                    sensor_node = SensorNode(sensor_id=user_id)
+                    sensor_node.save()
 
                 return True
 
@@ -43,4 +45,4 @@ class Authentication:
             print "fail"
         except Exception as failure:
             print "wrong PW" + str(failure)
-            return False;
+            return False
