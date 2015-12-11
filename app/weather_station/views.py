@@ -1,7 +1,6 @@
 """ Django Views """
 import datetime
 
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.http import JsonResponse
@@ -10,12 +9,14 @@ from django.contrib.auth.models import User
 
 from weather_station.models import SensorNode
 from weather_station.models import SensorReading
-
 from weather_station.securelayer import securelayer
+from weather_station.authentication import Authentication
+
 
 REFRESH_RATE = 10
 # Main page. Shows map & list of nodes
 def index(request):
+    """ The main page """
     template = loader.get_template('index.html')
 
     nodes = SensorNode.objects.all()
@@ -25,7 +26,8 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
-def getSensorReadings(node_id):
+def get_sensor_readings(node_id):
+    """ util function """
     readings = SensorReading.objects.filter(node_id=node_id)
     out = []
     for reading in readings:
@@ -54,12 +56,13 @@ def info(request, node_id):
 
         response_data['timestamp'] = node.first_seen
         response_data['position'] = node.position
-        response_data['readings'] = getSensorReadings(node)
+        response_data['readings'] = get_sensor_readings(node)
 
 
     return JsonResponse(response_data)
 
 def node_list():
+    """ Returns a array of nodes. """
     response_data = []
 
     nodes = SensorNode.objects.all()
@@ -77,6 +80,7 @@ def node_list():
 
 # View to show graphs of the recieved data for a node
 def plots(request, node_id):
+    """ used for the /plots/sensorID route """
     template = loader.get_template('plots.html')
     nodes = SensorNode.objects.get(sensor_id=node_id)
 
@@ -87,7 +91,7 @@ def plots(request, node_id):
     context = RequestContext(request, {
         'sensors': sensors,
         'sensor_id': node_id,
-        'readings': getSensorReadings(node_id)
+        'readings': get_sensor_readings(node_id)
     })
     return HttpResponse(template.render(context))
 
@@ -132,7 +136,8 @@ def signup():
     sensor_node = SensorNode(sensor_id=name)
     sensor_node.save()
 
-    # I should test the new user (by running user.check_password) to see if valid (guessing it always is...)
+    # I should test the new user (by running user.check_password)
+    # to see if valid (guessing it always is...)
 
     print "INFO for check:" + name + "," + password
     u = User.objects.get(username=name)
@@ -140,8 +145,6 @@ def signup():
     return JsonResponse(response_data)
 
 
-
-from weather_station.authentication import Authentication
 
 auth = Authentication()
 
@@ -151,16 +154,12 @@ auth = Authentication()
 def put_reading(request, node_id):
     # Valid values for type: { light,   temperature, humidity, wind_speed, atmospheric_pressure }
     # Valid units:           { cd/m^2,  C,           %,        m/s,        hPa / bar            }
-    # From this, I think I am going to create some subclasses.
-    known_types = ['light', 'temp', 'humidity', 'wind_speed', 'pressure', 'time', 'username', 'password']
 
-    # :- if authenticated, proceed.
-    # else, throw a 401!
     try:
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        node = SensorNode.objects.get(sensor_id=node_id)
+        SensorNode.objects.get(sensor_id=node_id)
         authenticated = auth.ifAuthenticatedAddEntry(username, password)
 
     except SensorNode.DoesNotExist:
