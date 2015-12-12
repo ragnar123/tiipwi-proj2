@@ -41,7 +41,9 @@
     {% if sensor_list %}
       <ul>
       {% for sensor in sensor_list %}
+          {% if sensor.num_readings > 0 %}
         <li><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a> ({{ sensor.num_readings }})</li>
+          {% endif %}
       {% endfor %}
       </ul>
     {% else %}
