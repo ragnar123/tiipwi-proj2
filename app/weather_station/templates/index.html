@@ -41,7 +41,7 @@
     {% if sensor_list %}
       <ul>
       {% for sensor in sensor_list %}
-        <li><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a></li>
+        <li><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a> ({{ sensor.num_readings }})</li>
       {% endfor %}
       </ul>
     {% else %}

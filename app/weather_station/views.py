@@ -20,6 +20,8 @@ def index(request):
     template = loader.get_template('index.html')
 
     nodes = SensorNode.objects.all()
+    for node in nodes:
+        node.get_number_of_readings()
 
     context = RequestContext(request, {
         'sensor_list': nodes,
