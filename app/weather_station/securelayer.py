@@ -1,13 +1,14 @@
-from django.contrib.auth.models import User
-from weather_station.models import SensorNode
 import datetime
 import string
 import random
 
-DEFAULT_SIZE=12
+from django.contrib.auth.models import User
+from weather_station.models import SensorNode
+
+DEFAULT_SIZE = 12
 
 class securelayer:
-
+    """ Provides function related to user creation. """
     def pswGenerator(self, psw_size, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(psw_size))
 
