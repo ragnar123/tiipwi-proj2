@@ -61,7 +61,7 @@ def info(request, node_id):
 
     return JsonResponse(response_data)
 
-def node_list():
+def node_list(request):
     """ Returns a array of nodes. """
     response_data = []
 
