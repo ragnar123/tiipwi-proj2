@@ -57,7 +57,7 @@
       <ul>
       {% for sensor in sensor_list %}
           {% if sensor.num_readings > 0 %}
-        <li id="li-{{ sensor.sensor_id }}"><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a> ({{ sensor.num_readings }})</li>
+        <li id="li-{{ sensor.sensor_id }}"><a href="/plots/{{ sensor.sensor_id }}/">Sensor #{{ sensor.sensor_id }}</a> ({{ sensor.num_readings }})</li>
               <script>sensors.push(new SensorNode({sensor_id: "{{ sensor.sensor_id }}" }))</script>
           {% endif %}
       {% endfor %}
@@ -69,7 +69,8 @@
 
   </div>
 </div>
-<div class="right" id="sensor_info">
+<div class="right">
+    <div id="sensor_info"></div>
 </div>
 </div>
 

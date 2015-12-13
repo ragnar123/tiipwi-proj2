@@ -41,7 +41,10 @@ def get_sensor_readings(node_id):
             'light': reading.light,
             'wind_speed' : reading.wind_speed,
             'lat': reading.lat,
-            'lon': reading.lon})
+            'lon': reading.lon,
+            'altitude': reading.altitude,
+            'sealevel_pressure': reading.sealevel_pressure
+        })
     return out
 
 
@@ -176,6 +179,8 @@ def put_reading(request, node_id):
         time = request.POST.get('time')
         lat = request.POST.get('lat')
         lon = request.POST.get('lon')
+        altitude = request.POST.get('altitude')
+        sealevel_pressure = request.POST.get('sealevel_pressure')
 
         reading = SensorReading(
             # node=node,
@@ -188,7 +193,9 @@ def put_reading(request, node_id):
             wind_speed=wind_speed,
             lat=lat,
             lon=lon,
-            light=light
+            light=light,
+            altitude=altitude,
+            sealevel_pressure=sealevel_pressure
         )
 
         print request.POST.get('username', 'NOT_AUTHENTICATED')

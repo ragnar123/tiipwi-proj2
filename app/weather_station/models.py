@@ -35,3 +35,5 @@ class SensorReading(models.Model):
     wind_speed = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     lat = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     lon = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    altitude = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    sealevel_pressure = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
