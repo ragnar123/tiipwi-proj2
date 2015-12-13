@@ -1,0 +1,25 @@
+
+.marker {
+  width: 240px;
+}
+
+.right {
+  width: 390px;
+  min-height: 200px;
+
+  float: right;
+  margin-top: 20px;
+
+}
+.left {
+  width: 666px;
+  float: left;
+}
+
+#infoWindow {
+  visibility: hidden;
+}
+
+strong {
+  font-weight: bold;
+}

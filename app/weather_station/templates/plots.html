@@ -1,0 +1,167 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RasPI weather station</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+   <script type="text/javascript" src="{% static 'js/sensornode.js' %}"></script>
+
+  <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.css"></link>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.js"></script>
+  <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing"></script>
+
+  <script type="text/javascript" src="{% static 'util.js' %}"></script>
+  <script type="text/javascript" src="{% static 'app-plots.js' %}"></script>
+</head>
+<body onload="load()">
+<div class="container">
+  <div class="left">
+
+  <div id="list">
+    <h1>Sensor {{ sensor_id }}</h1>
+    {% if sensor_list %}
+      <ul>
+      {% for sensor in sensor_list %}
+        <li><a href="/info/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a></li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <div id="sensors">
+        <ul>
+          <li v-for="sensor in nodes">
+            <span>
+              {% verbatim %}
+                {{ sensor.id }}, readings: {{ sensor.readings.length }}
+                <br> reading types: {{ sensor.sensorDesc }}
+                {% endverbatim %}
+
+            </span>
+          </li>
+        </ul>
+        {% verbatim %}
+          {{ sensor_list }}
+        {% endverbatim %}
+      </div>
+
+      <p>No sensors are available.</p>
+    {% endif %}
+  </div>
+  <div id="visualization"></div>
+
+
+
+  <script>
+    // fetch /info/nodeID
+    // parse the recieved collection
+    // first create a map of types
+    // and then create vectors of each type, respecting the timestamps (and not necesserailly the ids)
+    // use those to create plots
+
+    // And here in the middle section we will define the types in javascipt.
+
+    // .. then eventually we will reach a point where we will have to create the user interface.
+    // Widgets needed: { map, time-series plots, lists }
+    //
+
+
+    // ANd eventually you will replace the sqlite implementation with rethinkdb
+    // it seems to be possible to install it on the RPi: https://rethinkdb.com/docs/install/raspbian/
+
+    function initNode(node) {
+      get('/info/' + node.id + '/', function (httpResult) {
+        console.log(httpResult);
+        node.init(httpResult)
+      });
+    }
+
+
+    // python views wishlist {
+    //    /listNodes :- [12, 13, 14]
+    //    /getSensors/id :- [temperature, light]
+    //
+    // }
+
+    // Data variables
+    var sensorNodes = [];
+
+    function getSensorDescription() {
+      var str = "Sensors found: ";
+      sensorNodes.forEach(function (sn) {
+        str += "ID: "+ sn.id + ". sensors: " + JSON.stringify(sn.sensors) + ". \n";
+      });
+      return str;
+    }
+    function step2(nodeIds) {
+      console.log("plot", nodeIds);
+      nodeIds.forEach(function (node) {
+        var newNode = new SensorNode(node);
+        sensorNodes.push(newNode);
+
+        initNode(newNode);
+      });
+
+    }
+
+
+    window.onload = function () {
+      console.log("plots.html ready.");
+      //get('/list', step2);
+      step2([{ sensor_id : "{{ sensor_id }}" }]);
+
+      // Use vue.js bindings. refer to tutorial.
+      console.log("Initializing VUE!");
+      new Vue({
+        el: "#sensors",
+        data: {
+          nodes: sensorNodes,
+          sensor_list: getSensorDescription()
+        }
+
+      })
+    }
+
+    var items = [];
+
+    function plotGraph(items, start, end) {
+        var container = document.getElementById('visualization');
+        var dataset = new vis.DataSet(items);
+        console.log("About to plot", dataset);
+
+        var names = ['light', 'temperature'];
+        var groups = new vis.DataSet();
+        groups.add({
+            id: 0,
+            content: names[0],
+            options: {
+              drawPoints: {
+                style: 'square' // square, circle
+              },
+              shaded: {
+                orientation: 'bottom' // top, bottom
+              }
+          }});
+
+          groups.add({
+              id: 1,
+              content: 'Temperature',
+              options: {
+                drawPoints: { style: 'circle' },
+                shaded: {
+                  orientation: 'bottom' // top, bottom
+                }
+        }});
+
+        var options = {
+            start: start,
+            end: end
+        };
+        var graph2d = new vis.Graph2d(container, dataset, groups, options);
+    }
+
+  </script>
+</div>
+<div class="right" id="sensor_info">
+</div></div>
+</body>
+</html>
