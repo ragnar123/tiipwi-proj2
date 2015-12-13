@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ragnar123/tiipwi-proj2.svg?branch=master)](https://travis-ci.org/ragnar123/tiipwi-proj2)
+
 
 
 ## TODO
