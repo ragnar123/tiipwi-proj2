@@ -4,8 +4,8 @@
 <head>
   <title>RasPI weather station</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
-</head>
-<body onload="load()">
+   <script type="text/javascript" src="{% static 'js/sensornode.js' %}"></script>
+
   <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.css"></link>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.10.0/vis.js"></script>
@@ -13,7 +13,9 @@
 
   <script type="text/javascript" src="{% static 'util.js' %}"></script>
   <script type="text/javascript" src="{% static 'app-plots.js' %}"></script>
-
+</head>
+<body onload="load()">
+<div class="container">
   <div class="left">
 
   <div id="list">
@@ -160,6 +162,6 @@
   </script>
 </div>
 <div class="right" id="sensor_info">
-</div>
+</div></div>
 </body>
 </html>

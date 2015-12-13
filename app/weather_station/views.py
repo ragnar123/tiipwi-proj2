@@ -27,7 +27,7 @@ def index(request):
 
     # TODO: Sort nodes by readings.
     # node.num_readings
-    nodes = sorted(nodes, cmp=sort_by_num_readings,reverse=True)
+    nodes = sorted(nodes, cmp=sort_by_num_readings, reverse=True)
 
     context = RequestContext(request, {
         'sensor_list': nodes,
@@ -42,10 +42,10 @@ def get_sensor_readings(node_id):
         out.append({
             'timestamp': reading.timestamp,
             'temp': reading.temp,
-            'pressure' : reading.pressure,
+            'pressure': reading.pressure,
             'humidity': reading.humidity,
             'light': reading.light,
-            'wind_speed' : reading.wind_speed,
+            'wind_speed': reading.wind_speed,
             'lat': reading.lat,
             'lon': reading.lon,
             'altitude': reading.altitude,
@@ -78,10 +78,13 @@ def node_list(request):
 
     nodes = SensorNode.objects.all()
     for node in nodes:
+        node.get_number_of_readings()
         node_data = {}
         node_data['sensor_id'] = node.sensor_id
         node_data['position'] = node.position
-        response_data.append(node_data)
+        node_data['num_readings'] = node.num_readings;
+        if node.num_readings > 0:
+            response_data.append(node_data)
 
         # We need to extract: nodeis, position, last readings, etc?
         # 1. fetch the sensor readings from db.

@@ -8,6 +8,7 @@
   <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing&libraries=visualization&sensor=true_or_false"></script>
   <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
   <script type="text/javascript" src="{% static 'util.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/sensornode.js' %}"></script>
   <script type="text/javascript" src="{% static 'app.js' %}"></script>
   <!-- Material Design fonts -->
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
@@ -123,6 +124,7 @@
                         sensor.count[t] = sensor.count[t] + 1 || 1;
                     }
                 });
+                sensor.readings = data.readings;
             });
 
             sensor.update_display();
