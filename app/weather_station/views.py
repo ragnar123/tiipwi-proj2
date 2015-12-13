@@ -12,6 +12,8 @@ from weather_station.models import SensorReading
 from weather_station.securelayer import securelayer
 from weather_station.authentication import Authentication
 
+def sort_by_num_readings(x, y):
+    return x.num_readings - y.num_readings;
 
 REFRESH_RATE = 10
 # Main page. Shows map & list of nodes
@@ -22,6 +24,10 @@ def index(request):
     nodes = SensorNode.objects.all()
     for node in nodes:
         node.get_number_of_readings()
+
+    # TODO: Sort nodes by readings.
+    # node.num_readings
+    nodes = sorted(nodes, cmp=sort_by_num_readings,reverse=True)
 
     context = RequestContext(request, {
         'sensor_list': nodes,

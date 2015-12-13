@@ -26,6 +26,10 @@ function addWeatherStationToMap(sensorNode) {
     }
     if (pos === "POSITION NOT AVAILABLE.") {
         pos = [56.1451312, 10.2811651];
+        pos = [56.1572, 10.2107];
+
+        pos[0] += Math.random() * 0.02;
+        pos[1] -= Math.random() * 0.02;
     }
     if (typeof pos == "string" && pos.indexOf(',') != -1) {
         pos = pos.split(',');
@@ -51,7 +55,10 @@ function addWeatherStationToMap(sensorNode) {
         var sealevel_pressure = "N/A";
 
 
-        console.log(getSensor(id));
+        var sensor = getSensor(id);
+        if (sensor.readings) {
+            console.log("readings", sensor.readings);
+        }
 
         new Vue({
             el: '#sensor_info',
@@ -122,22 +129,22 @@ function load() {
 
       var f = chroma.scale(['blue', 'green', 'yellow', 'red']);
 
-    for (var reading in readings) {
-      var value = readings[reading].temperature + 50;
-      if (value < 0) {value = 0}
-      if (value > 100) {value = 100}
-      /*
-      var sum += value;
-      var mean = sum/reading;
-      var base = (value-mean);
-      var tmp = Math.pow(base, 2);
-      var num_var += tmp;
-      var variance = num_var/reading;
-      var std_dev = Math.sqrt(variance);
-      var solution = (sum - mean)/std_dev;
-      console.log(solution); https://en.wikipedia.org/wiki/Feature_scaling#Rescaling
-      */
-      value = value / 100;
+      for (var reading in readings) {
+          var value = readings[reading].temperature + 50;
+          if (value < 0) {value = 0}
+          if (value > 100) {value = 100}
+          /*
+          var sum += value;
+          var mean = sum/reading;
+          var base = (value-mean);
+          var tmp = Math.pow(base, 2);
+          var num_var += tmp;
+          var variance = num_var/reading;
+          var std_dev = Math.sqrt(variance);
+          var solution = (sum - mean)/std_dev;
+          console.log(solution); https://en.wikipedia.org/wiki/Feature_scaling#Rescaling
+          */
+          value = value / 100;
 
 
       var color = f(value).toString();
