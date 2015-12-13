@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>weather_station.middleware</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="weather_station-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="weather_station-module.html">Package&nbsp;weather_station</a> ::
+        Module&nbsp;middleware
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="weather_station.middleware-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="weather_station.middleware-module.html">Module weather_station.middleware</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-comment"># Orignal version taken from http://www.djangosnippets.org/snippets/186/</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-comment"># Original author: udfalkso</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-comment"># Modified by: Shwagroo Team and Gun.io</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">sys</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">re</tt> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">hotshot</tt><tt class="py-op">,</tt> <tt class="py-name">hotshot</tt><tt class="py-op">.</tt><tt class="py-name">stats</tt> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">tempfile</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">conf</tt> <tt class="py-keyword">import</tt> <tt class="py-name">settings</tt> </tt>
+<a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"> </tt>
+<a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable weather_station.middleware.words_re=weather_station.middleware-module.html#words_re"><a title="weather_station.middleware.words_re" class="py-name" href="#" onclick="return doclink('link-0', 'words_re', 'link-0');">words_re</a></tt> <tt class="py-op">=</tt> <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt> <tt class="py-string">r'\s+'</tt> <tt class="py-op">)</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt id="link-1" class="py-name" targets="Variable weather_station.middleware.group_prefix_re=weather_station.middleware-module.html#group_prefix_re"><a title="weather_station.middleware.group_prefix_re" class="py-name" href="#" onclick="return doclink('link-1', 'group_prefix_re', 'link-1');">group_prefix_re</a></tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line">    <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt> <tt class="py-string">"^.*/django/[^/]+"</tt> <tt class="py-op">)</tt><tt class="py-op">,</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line">    <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt> <tt class="py-string">"^(.*)/[^/]+$"</tt> <tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-comment"># extract module path</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">    <tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt> <tt class="py-string">".*"</tt> <tt class="py-op">)</tt><tt class="py-op">,</tt>           <tt class="py-comment"># catch strange entries</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-op">]</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware"></a><div id="ProfileMiddleware-def"><a name="L22"></a><tt class="py-lineno"> 22</tt> <a class="py-toggle" href="#" id="ProfileMiddleware-toggle" onclick="return toggle('ProfileMiddleware');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html">ProfileMiddleware</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="ProfileMiddleware-expanded"><a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">    Displays hotshot profiling for any view.</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">    http://yoursite.com/yourview/?prof</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">    Add the "prof" key to query string by appending ?prof (or &amp;prof=)</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">    and you'll see the profiling results in your browser.</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    It's set up to only be available in django's debug mode, is available for superuser otherwise,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    but you really shouldn't add this middleware to any production configuration.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">    WARNING: It uses hotshot profiler which is not thread safe.</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="ProfileMiddleware.process_request"></a><div id="ProfileMiddleware.process_request-def"><a name="L34"></a><tt class="py-lineno"> 34</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.process_request-toggle" onclick="return toggle('ProfileMiddleware.process_request');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#process_request">process_request</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.process_request-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.process_request-expanded"><a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">DEBUG</tt> <tt class="py-keyword">or</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">is_superuser</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-string">'prof'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">GET</tt><tt class="py-op">:</tt>  </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpfile</tt> <tt class="py-op">=</tt> <tt class="py-name">tempfile</tt><tt class="py-op">.</tt><tt class="py-name">mktemp</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prof</tt> <tt class="py-op">=</tt> <tt class="py-name">hotshot</tt><tt class="py-op">.</tt><tt class="py-name">Profile</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpfile</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware.process_view"></a><div id="ProfileMiddleware.process_view-def"><a name="L39"></a><tt class="py-lineno"> 39</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.process_view-toggle" onclick="return toggle('ProfileMiddleware.process_view');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#process_view">process_view</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">,</tt> <tt class="py-param">callback</tt><tt class="py-op">,</tt> <tt class="py-param">callback_args</tt><tt class="py-op">,</tt> <tt class="py-param">callback_kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.process_view-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.process_view-expanded"><a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">DEBUG</tt> <tt class="py-keyword">or</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">is_superuser</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-string">'prof'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">GET</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prof</tt><tt class="py-op">.</tt><tt class="py-name">runcall</tt><tt class="py-op">(</tt><tt class="py-name">callback</tt><tt class="py-op">,</tt> <tt class="py-name">request</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-name">callback_args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">callback_kwargs</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware.get_group"></a><div id="ProfileMiddleware.get_group-def"><a name="L43"></a><tt class="py-lineno"> 43</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.get_group-toggle" onclick="return toggle('ProfileMiddleware.get_group');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#get_group">get_group</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">file</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.get_group-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.get_group-expanded"><a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">g</tt> <tt class="py-keyword">in</tt> <tt id="link-2" class="py-name"><a title="weather_station.middleware.group_prefix_re" class="py-name" href="#" onclick="return doclink('link-2', 'group_prefix_re', 'link-1');">group_prefix_re</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">            <tt class="py-name">name</tt> <tt class="py-op">=</tt> <tt class="py-name">g</tt><tt class="py-op">.</tt><tt class="py-name">findall</tt><tt class="py-op">(</tt> <tt class="py-name">file</tt> <tt class="py-op">)</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">name</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">name</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware.get_summary"></a><div id="ProfileMiddleware.get_summary-def"><a name="L49"></a><tt class="py-lineno"> 49</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.get_summary-toggle" onclick="return toggle('ProfileMiddleware.get_summary');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#get_summary">get_summary</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">results_dict</tt><tt class="py-op">,</tt> <tt class="py-param">sum</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.get_summary-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.get_summary-expanded"><a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">        <tt class="py-name">list</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt> <tt class="py-op">(</tt><tt class="py-name">item</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">item</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">item</tt> <tt class="py-keyword">in</tt> <tt class="py-name">results_dict</tt><tt class="py-op">.</tt><tt class="py-name">items</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">]</tt> </tt>
+<a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">        <tt class="py-name">list</tt><tt class="py-op">.</tt><tt class="py-name">sort</tt><tt class="py-op">(</tt> <tt class="py-name">reverse</tt> <tt class="py-op">=</tt> <tt class="py-name">True</tt> <tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-name">list</tt> <tt class="py-op">=</tt> <tt class="py-name">list</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">40</tt><tt class="py-op">]</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line">        <tt class="py-name">res</tt> <tt class="py-op">=</tt> <tt class="py-string">"      tottime\n"</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">item</tt> <tt class="py-keyword">in</tt> <tt class="py-name">list</tt><tt class="py-op">:</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">            <tt class="py-name">res</tt> <tt class="py-op">+=</tt> <tt class="py-string">"%4.1f%% %7.3f %s\n"</tt> <tt class="py-op">%</tt> <tt class="py-op">(</tt> <tt class="py-number">100</tt><tt class="py-op">*</tt><tt class="py-name">item</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">/</tt><tt class="py-name">sum</tt> <tt class="py-keyword">if</tt> <tt class="py-name">sum</tt> <tt class="py-keyword">else</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-name">item</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">item</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-op">)</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">res</tt> </tt>
+</div><a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware.summary_for_files"></a><div id="ProfileMiddleware.summary_for_files-def"><a name="L60"></a><tt class="py-lineno"> 60</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.summary_for_files-toggle" onclick="return toggle('ProfileMiddleware.summary_for_files');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#summary_for_files">summary_for_files</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">stats_str</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.summary_for_files-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.summary_for_files-expanded"><a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-name">stats_str</tt> <tt class="py-op">=</tt> <tt class="py-name">stats_str</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">"\n"</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">5</tt><tt class="py-op">:</tt><tt class="py-op">]</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">mystats</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line">        <tt class="py-name">mygroups</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line"> </tt>
+<a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-name">sum</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">s</tt> <tt class="py-keyword">in</tt> <tt class="py-name">stats_str</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">            <tt class="py-name">fields</tt> <tt class="py-op">=</tt> <tt id="link-3" class="py-name"><a title="weather_station.middleware.words_re" class="py-name" href="#" onclick="return doclink('link-3', 'words_re', 'link-0');">words_re</a></tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-name">s</tt><tt class="py-op">)</tt><tt class="py-op">;</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-number">7</tt><tt class="py-op">:</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line">                <tt class="py-name">time</tt> <tt class="py-op">=</tt> <tt class="py-name">float</tt><tt class="py-op">(</tt><tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">2</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">                <tt class="py-name">sum</tt> <tt class="py-op">+=</tt> <tt class="py-name">time</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">                <tt class="py-name">file</tt> <tt class="py-op">=</tt> <tt class="py-name">fields</tt><tt class="py-op">[</tt><tt class="py-number">6</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">":"</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line"> </tt>
+<a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">file</tt> <tt class="py-keyword">in</tt> <tt class="py-name">mystats</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">                    <tt class="py-name">mystats</tt><tt class="py-op">[</tt><tt class="py-name">file</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">                <tt class="py-name">mystats</tt><tt class="py-op">[</tt><tt class="py-name">file</tt><tt class="py-op">]</tt> <tt class="py-op">+=</tt> <tt class="py-name">time</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">                <tt class="py-name">group</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-4" class="py-name" targets="Method weather_station.middleware.ProfileMiddleware.get_group()=weather_station.middleware.ProfileMiddleware-class.html#get_group"><a title="weather_station.middleware.ProfileMiddleware.get_group" class="py-name" href="#" onclick="return doclink('link-4', 'get_group', 'link-4');">get_group</a></tt><tt class="py-op">(</tt><tt class="py-name">file</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">group</tt> <tt class="py-keyword">in</tt> <tt class="py-name">mygroups</tt><tt class="py-op">:</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">                    <tt class="py-name">mygroups</tt><tt class="py-op">[</tt> <tt class="py-name">group</tt> <tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">                <tt class="py-name">mygroups</tt><tt class="py-op">[</tt> <tt class="py-name">group</tt> <tt class="py-op">]</tt> <tt class="py-op">+=</tt> <tt class="py-name">time</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">"&lt;pre&gt;"</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">               <tt class="py-string">" ---- By file ----\n\n"</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method weather_station.middleware.ProfileMiddleware.get_summary()=weather_station.middleware.ProfileMiddleware-class.html#get_summary"><a title="weather_station.middleware.ProfileMiddleware.get_summary" class="py-name" href="#" onclick="return doclink('link-5', 'get_summary', 'link-5');">get_summary</a></tt><tt class="py-op">(</tt><tt class="py-name">mystats</tt><tt class="py-op">,</tt><tt class="py-name">sum</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">"\n"</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">               <tt class="py-string">" ---- By group ---\n\n"</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="weather_station.middleware.ProfileMiddleware.get_summary" class="py-name" href="#" onclick="return doclink('link-6', 'get_summary', 'link-5');">get_summary</a></tt><tt class="py-op">(</tt><tt class="py-name">mygroups</tt><tt class="py-op">,</tt><tt class="py-name">sum</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> \ </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">               <tt class="py-string">"&lt;/pre&gt;"</tt> </tt>
+</div><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"> </tt>
+<a name="ProfileMiddleware.process_response"></a><div id="ProfileMiddleware.process_response-def"><a name="L89"></a><tt class="py-lineno"> 89</tt> <a class="py-toggle" href="#" id="ProfileMiddleware.process_response-toggle" onclick="return toggle('ProfileMiddleware.process_response');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.middleware.ProfileMiddleware-class.html#process_response">process_response</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">request</tt><tt class="py-op">,</tt> <tt class="py-param">response</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ProfileMiddleware.process_response-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="ProfileMiddleware.process_response-expanded"><a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-op">(</tt><tt class="py-name">settings</tt><tt class="py-op">.</tt><tt class="py-name">DEBUG</tt> <tt class="py-keyword">or</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">is_superuser</tt><tt class="py-op">)</tt> <tt class="py-keyword">and</tt> <tt class="py-string">'prof'</tt> <tt class="py-keyword">in</tt> <tt class="py-name">request</tt><tt class="py-op">.</tt><tt class="py-name">GET</tt><tt class="py-op">:</tt> </tt>
+<a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">prof</tt><tt class="py-op">.</tt><tt class="py-name">close</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">            <tt class="py-name">out</tt> <tt class="py-op">=</tt> <tt class="py-name">StringIO</tt><tt class="py-op">.</tt><tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">            <tt class="py-name">old_stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">out</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line"> </tt>
+<a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line">            <tt class="py-name">stats</tt> <tt class="py-op">=</tt> <tt class="py-name">hotshot</tt><tt class="py-op">.</tt><tt class="py-name">stats</tt><tt class="py-op">.</tt><tt class="py-name">load</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpfile</tt><tt class="py-op">)</tt> </tt>
+<a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">            <tt class="py-name">stats</tt><tt class="py-op">.</tt><tt class="py-name">sort_stats</tt><tt class="py-op">(</tt><tt class="py-string">'time'</tt><tt class="py-op">,</tt> <tt class="py-string">'calls'</tt><tt class="py-op">)</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">            <tt class="py-name">stats</tt><tt class="py-op">.</tt><tt class="py-name">print_stats</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line"> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">            <tt class="py-name">sys</tt><tt class="py-op">.</tt><tt class="py-name">stdout</tt> <tt class="py-op">=</tt> <tt class="py-name">old_stdout</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-name">stats_str</tt> <tt class="py-op">=</tt> <tt class="py-name">out</tt><tt class="py-op">.</tt><tt class="py-name">getvalue</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line"> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">response</tt> <tt class="py-keyword">and</tt> <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> <tt class="py-keyword">and</tt> <tt class="py-name">stats_str</tt><tt class="py-op">:</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> <tt class="py-op">=</tt> <tt class="py-string">"&lt;pre&gt;"</tt> <tt class="py-op">+</tt> <tt class="py-name">stats_str</tt> <tt class="py-op">+</tt> <tt class="py-string">"&lt;/pre&gt;"</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line"> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">            <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> <tt class="py-op">=</tt> <tt class="py-string">"\n"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">"\n"</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-op">:</tt><tt class="py-number">40</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">            <tt class="py-name">response</tt><tt class="py-op">.</tt><tt class="py-name">content</tt> <tt class="py-op">+=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method weather_station.middleware.ProfileMiddleware.summary_for_files()=weather_station.middleware.ProfileMiddleware-class.html#summary_for_files"><a title="weather_station.middleware.ProfileMiddleware.summary_for_files" class="py-name" href="#" onclick="return doclink('link-7', 'summary_for_files', 'link-7');">summary_for_files</a></tt><tt class="py-op">(</tt><tt class="py-name">stats_str</tt><tt class="py-op">)</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">            <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">unlink</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpfile</tt><tt class="py-op">)</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line"> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">response</tt> </tt>
+</div></div><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="weather_station-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Sun Dec 13 14:17:17 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

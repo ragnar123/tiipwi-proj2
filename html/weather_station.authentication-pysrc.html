@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>weather_station.authentication</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="weather_station-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="weather_station-module.html">Package&nbsp;weather_station</a> ::
+        Module&nbsp;authentication
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="weather_station.authentication-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="weather_station.authentication-module.html">Module weather_station.authentication</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-docstring">Authentication module</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">string</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">random</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">django</tt><tt class="py-op">.</tt><tt class="py-name">contrib</tt><tt class="py-op">.</tt><tt id="link-0" class="py-name" targets="Variable weather_station.views.auth=weather_station.views-module.html#auth"><a title="weather_station.views.auth" class="py-name" href="#" onclick="return doclink('link-0', 'auth', 'link-0');">auth</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Module weather_station.models=weather_station.models-module.html"><a title="weather_station.models" class="py-name" href="#" onclick="return doclink('link-1', 'models', 'link-1');">models</a></tt> <tt class="py-keyword">import</tt> <tt class="py-name">User</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt id="link-2" class="py-name" targets="Package weather_station=weather_station-module.html"><a title="weather_station" class="py-name" href="#" onclick="return doclink('link-2', 'weather_station', 'link-2');">weather_station</a></tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="weather_station.models" class="py-name" href="#" onclick="return doclink('link-3', 'models', 'link-1');">models</a></tt> <tt class="py-keyword">import</tt> <tt id="link-4" class="py-name" targets="Class weather_station.models.SensorNode=weather_station.models.SensorNode-class.html"><a title="weather_station.models.SensorNode" class="py-name" href="#" onclick="return doclink('link-4', 'SensorNode', 'link-4');">SensorNode</a></tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt id="link-5" class="py-name" targets="Variable weather_station.authentication.DEFAULT_SIZE=weather_station.authentication-module.html#DEFAULT_SIZE,Variable weather_station.securelayer.DEFAULT_SIZE=weather_station.securelayer-module.html#DEFAULT_SIZE"><a title="weather_station.authentication.DEFAULT_SIZE
+weather_station.securelayer.DEFAULT_SIZE" class="py-name" href="#" onclick="return doclink('link-5', 'DEFAULT_SIZE', 'link-5');">DEFAULT_SIZE</a></tt> <tt class="py-op">=</tt> <tt class="py-number">6</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="Authentication"></a><div id="Authentication-def"><a name="L12"></a><tt class="py-lineno">12</tt> <a class="py-toggle" href="#" id="Authentication-toggle" onclick="return toggle('Authentication');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="weather_station.authentication.Authentication-class.html">Authentication</a><tt class="py-op">:</tt> </tt>
+</div><div id="Authentication-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Authentication-expanded"><a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">    <tt class="py-docstring">""" Provides functions for authentication. """</tt> </tt>
+<a name="Authentication.psw_generator"></a><div id="Authentication.psw_generator-def"><a name="L14"></a><tt class="py-lineno">14</tt> <a class="py-toggle" href="#" id="Authentication.psw_generator-toggle" onclick="return toggle('Authentication.psw_generator');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.authentication.Authentication-class.html#psw_generator">psw_generator</a><tt class="py-op">(</tt><tt class="py-param">psw_size</tt><tt class="py-op">,</tt> <tt class="py-param">chars</tt><tt class="py-op">=</tt><tt class="py-name">string</tt><tt class="py-op">.</tt><tt class="py-name">ascii_uppercase</tt> <tt class="py-op">+</tt> <tt class="py-name">string</tt><tt class="py-op">.</tt><tt class="py-name">digits</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Authentication.psw_generator-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Authentication.psw_generator-expanded"><a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-string">''</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">random</tt><tt class="py-op">.</tt><tt class="py-name">choice</tt><tt class="py-op">(</tt><tt class="py-name">chars</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">_</tt> <tt class="py-keyword">in</tt> <tt class="py-name">range</tt><tt class="py-op">(</tt><tt class="py-name">psw_size</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="Authentication.createNewUser"></a><div id="Authentication.createNewUser-def"><a name="L17"></a><tt class="py-lineno">17</tt> <a class="py-toggle" href="#" id="Authentication.createNewUser-toggle" onclick="return toggle('Authentication.createNewUser');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.authentication.Authentication-class.html#createNewUser">createNewUser</a><tt class="py-op">(</tt><tt class="py-param">device_mac</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Authentication.createNewUser-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Authentication.createNewUser-expanded"><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">        <tt class="py-name">user</tt> <tt class="py-op">=</tt> <tt class="py-name">User</tt><tt class="py-op">.</tt><tt class="py-name">objects</tt><tt class="py-op">.</tt><tt class="py-name">create_user</tt><tt class="py-op">(</tt><tt class="py-name">device_mac</tt><tt class="py-op">,</tt> <tt class="py-name">mail</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-name">password</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">        <tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">set_password</tt><tt class="py-op">(</tt><tt id="link-6" class="py-name" targets="Method weather_station.authentication.Authentication.psw_generator()=weather_station.authentication.Authentication-class.html#psw_generator"><a title="weather_station.authentication.Authentication.psw_generator" class="py-name" href="#" onclick="return doclink('link-6', 'psw_generator', 'link-6');">psw_generator</a></tt><tt class="py-op">(</tt><tt id="link-7" class="py-name"><a title="weather_station.authentication.DEFAULT_SIZE
+weather_station.securelayer.DEFAULT_SIZE" class="py-name" href="#" onclick="return doclink('link-7', 'DEFAULT_SIZE', 'link-5');">DEFAULT_SIZE</a></tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">        <tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">groups</tt><tt class="py-op">.</tt><tt class="py-name">add</tt><tt class="py-op">(</tt><tt class="py-name">authenticated_sensor_group</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">        <tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">save</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"> </tt>
+<a name="Authentication.ifAuthenticatedAddEntry"></a><div id="Authentication.ifAuthenticatedAddEntry-def"><a name="L24"></a><tt class="py-lineno">24</tt> <a class="py-toggle" href="#" id="Authentication.ifAuthenticatedAddEntry-toggle" onclick="return toggle('Authentication.ifAuthenticatedAddEntry');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="weather_station.authentication.Authentication-class.html#ifAuthenticatedAddEntry">ifAuthenticatedAddEntry</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">user_id</tt><tt class="py-op">,</tt> <tt class="py-param">raw_password</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Authentication.ifAuthenticatedAddEntry-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Authentication.ifAuthenticatedAddEntry-expanded"><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">        <tt class="py-comment"># Distinction between User and SensorNode. ? (/signup produces a username.)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt class="py-comment"># Sensor_ID is now 6digit string (was 4 digit numeric) (migration ok)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt class="py-keyword">print</tt> <tt class="py-name">user_id</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">            <tt class="py-name">user</tt> <tt class="py-op">=</tt> <tt class="py-name">User</tt><tt class="py-op">.</tt><tt class="py-name">objects</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-name">username</tt><tt class="py-op">=</tt><tt class="py-name">user_id</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-string">"CHECKING USER "</tt> <tt class="py-op">+</tt> <tt class="py-name">user_id</tt> <tt class="py-op">+</tt> <tt class="py-string">". IF PW "</tt> <tt class="py-op">+</tt> <tt class="py-name">raw_password</tt> <tt class="py-op">+</tt> <tt class="py-string">" is valid.."</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">user</tt><tt class="py-op">.</tt><tt class="py-name">check_password</tt><tt class="py-op">(</tt><tt class="py-name">raw_password</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-string">"We were able to authenticate you."</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-string">"need to initialize a SensorNode with id as yours"</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-name">sensor_node</tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="weather_station.models.SensorNode" class="py-name" href="#" onclick="return doclink('link-8', 'SensorNode', 'link-4');">SensorNode</a></tt><tt class="py-op">.</tt><tt class="py-name">objects</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt id="link-9" class="py-name" targets="Variable weather_station.models.SensorNode.sensor_id=weather_station.models.SensorNode-class.html#sensor_id"><a title="weather_station.models.SensorNode.sensor_id" class="py-name" href="#" onclick="return doclink('link-9', 'sensor_id', 'link-9');">sensor_id</a></tt><tt class="py-op">=</tt><tt class="py-name">user_id</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">sensor_node</tt><tt class="py-op">:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                    <tt class="py-keyword">print</tt> <tt class="py-string">"not found. creating"</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                    <tt class="py-name">sensor_node</tt> <tt class="py-op">=</tt> <tt id="link-10" class="py-name"><a title="weather_station.models.SensorNode" class="py-name" href="#" onclick="return doclink('link-10', 'SensorNode', 'link-4');">SensorNode</a></tt><tt class="py-op">(</tt><tt id="link-11" class="py-name"><a title="weather_station.models.SensorNode.sensor_id" class="py-name" href="#" onclick="return doclink('link-11', 'sensor_id', 'link-9');">sensor_id</a></tt><tt class="py-op">=</tt><tt class="py-name">user_id</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">                    <tt class="py-name">sensor_node</tt><tt class="py-op">.</tt><tt class="py-name">save</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line"> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line"> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">                <tt class="py-keyword">raise</tt> <tt class="py-name">Exception</tt><tt class="py-op">(</tt><tt class="py-string">'User not known.'</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt id="link-12" class="py-name"><a title="weather_station.models.SensorNode" class="py-name" href="#" onclick="return doclink('link-12', 'SensorNode', 'link-4');">SensorNode</a></tt><tt class="py-op">.</tt><tt class="py-name">DoesNotExist</tt><tt class="py-op">:</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-string">"fail"</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">Exception</tt> <tt class="py-keyword">as</tt> <tt class="py-name">failure</tt><tt class="py-op">:</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-string">"wrong PW"</tt> <tt class="py-op">+</tt> <tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">failure</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+</div></div><a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="weather_station-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Sun Dec 13 14:17:17 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
