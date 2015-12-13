@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 
   <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw&libraries=drawing&libraries=visualization&sensor=true_or_false"></script>
-  <!-- <script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAkpyGMVX1ffpiJMTtAGYvYwskobvwd7gw" type="text/javascript"></script>-->
   <script src="//cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
   <script type="text/javascript" src="{% static 'util.js' %}"></script>
   <script type="text/javascript" src="{% static 'app.js' %}"></script>
@@ -17,13 +16,26 @@
   <!-- Bootstrap -->
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- jQuery -->
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+</head>
   <!-- Bootstrap Material Design -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.5/css/bootstrap-material-design.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.5/css/ripples.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
+
+
+<!-- Twitter Bootstrap -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
   <style>
     body {
       padding-top: 50px
+    }
+    #list {
+        margin-top:30px;
+        width: 640px;
     }
   </style>
 
@@ -32,27 +44,99 @@
 <body onload="load()">
 <div class="container">
   <div class="left">
-  <h1>Map with all sensors</h1>
+  <h1 class="jumbotron" style="width: 640px;">Map with all sensors</h1>
   <div id="map" style="width: 640px; height: 300px;"></div>
 
-  <div id="list">
-    <h1>Sensor list</h1>
-
+  <div id="list" class="well">
     {% if sensor_list %}
+        <script>
+        var sensors = [];
+        </script>
+      <h1>Sensor list</h1>
+
       <ul>
       {% for sensor in sensor_list %}
           {% if sensor.num_readings > 0 %}
-        <li><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a> ({{ sensor.num_readings }})</li>
+        <li id="li-{{ sensor.sensor_id }}"><a href="/plots/{{ sensor.sensor_id }}/">Sensor {{ sensor.position }}</a> ({{ sensor.num_readings }})</li>
+              <script>sensors.push(new SensorNode({sensor_id: "{{ sensor.sensor_id }}" }))</script>
           {% endif %}
       {% endfor %}
       </ul>
     {% else %}
       <p>No sensors are available.</p>
     {% endif %}
+      <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#simple-dialog">Select series</button>
+
   </div>
 </div>
 <div class="right" id="sensor_info">
 </div>
 </div>
+
+<!--Modals-->
+<div id="simple-dialog" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>E dolore commodo, id anim aute sint cupidatat eu est anim tamen ad possumus,
+          legam officia firmissimum. Eram deserunt domesticarum, iis ita praetermissum,
+          nam aliquip quo probant, incididunt et occaecat an nam enim exquisitaque a
+          nescius velit admodum, non ad cohaerescant, probant o nulla tempor. Aute aut te
+          quis arbitror ubi ne aliqua consequat aliquip. Ad sunt laborum senserit, de do
+          quem possumus. Sint tractavissent cupidatat aute possumus ita elit ad cupidatat.
+          Arbitror ab fabulas o eu e veniam pariatur. Non voluptate comprehenderit ad nisi
+          id voluptate. Quis distinguantur quibusdam quae mentitum o si minim illum nisi
+          mandaremus.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="source-modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Source Code</h4>
+      </div>
+        <div id="visualization"></div>
+      <div class="modal-body">
+        <pre></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    // Add buttons plots and types of measurements for nodes.
+    sensors.forEach(function (sensor) {
+        types = ['humidity', 'lat', 'lon', 'light', 'pressure', 'temp', 'wind'];
+        count = { };
+        console.log('this code is exectued for every sensor ..');
+        get('/info/' + sensor.id, function (data) {
+            data.readings.map(function (obj) {
+                types.forEach(function (t) {
+                    if (obj[t] != null) {
+                        count[t] = count[t] + 1 || 1;
+                    }
+                });
+            });
+            console.log(sensor.id, count);
+            sensor.count = count;
+            sensor.update_display();
+            setModal(JSON.stringify(sensor.count));
+        });
+
+
+    });
+
+    function setModal(content) {
+        // Sets the innerContent of the modal window
+        $("#simple-dialog .modal-body").text(content);
+    }
+
+</script>
 </body>
 </html>
