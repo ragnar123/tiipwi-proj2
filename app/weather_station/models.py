@@ -15,7 +15,10 @@ class SensorNode(models.Model):
     def get_number_of_readings(self):
         """ Returns the number of readings attached to a sensor. """
         readings = SensorReading.objects.filter(node=self)
+        self.num_readings = len(readings)
         return len(readings)
+
+    num_readings = -1
 
 
 class SensorReading(models.Model):
