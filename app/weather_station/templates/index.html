@@ -57,7 +57,7 @@
       <ul>
       {% for sensor in sensor_list %}
           {% if sensor.num_readings > 0 %}
-        <li id="li-{{ sensor.sensor_id }}"><a href="/plots/{{ sensor.sensor_id }}/">Sensor #{{ sensor.sensor_id }}</a> ({{ sensor.num_readings }})</li>
+        <li id="li-{{ sensor.sensor_id }}"><a href="/plots/{{ sensor.sensor_id }}/">Sensor #{{ sensor.sensor_id }}</a>, {{ sensor.num_readings }} readings total</li>
               <script>sensors.push(new SensorNode({sensor_id: "{{ sensor.sensor_id }}" }))</script>
           {% endif %}
       {% endfor %}
@@ -113,19 +113,18 @@
 
     // Add buttons plots and types of measurements for nodes.
     sensors.forEach(function (sensor) {
-        types = ['humidity', 'lat', 'lon', 'light', 'pressure', 'temp', 'wind'];
-        count = { };
+        types = ['humidity', 'lat', 'lon', 'light', 'pressure', 'temp', 'wind_speed', 'altitude', 'sealevel_pressure'];
+        sensor.count = { };
         console.log('this code is exectued for every sensor ..');
         get('/info/' + sensor.id, function (data) {
             data.readings.map(function (obj) {
                 types.forEach(function (t) {
                     if (obj[t] != null) {
-                        count[t] = count[t] + 1 || 1;
+                        sensor.count[t] = sensor.count[t] + 1 || 1;
                     }
                 });
             });
-            console.log(sensor.id, count);
-            sensor.count = count;
+
             sensor.update_display();
             setModal(JSON.stringify(sensor.count));
         });

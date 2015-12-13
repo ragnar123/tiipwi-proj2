@@ -14,33 +14,33 @@ function getSensor(id) {
 }
 
 function addWeatherStationToMap(sensorNode) {
-  var pos = sensorNode.position;
-  var id = sensorNode.sensor_id;
-  var temp = "N/A";
+    var pos = sensorNode.position;
+    var id = sensorNode.sensor_id;
+    var temp = "N/A";
     if (sensorNode.readings) {
         temp = sensorNode.readings[sensorNode.readings.length - 1].temp + "°C";
     }
-  // Some default locations...
-  if (pos === "AU Library!") {
-    pos = [56.1572, 10.2107];
-  }
-  if (pos === "POSITION NOT AVAILABLE.") {
-    pos = [56.1451312, 10.2811651];
-  }
+    // Some default locations...
+    if (pos === "AU Library!") {
+        pos = [56.1572, 10.2107];
+    }
+    if (pos === "POSITION NOT AVAILABLE.") {
+        pos = [56.1451312, 10.2811651];
+    }
     if (typeof pos == "string" && pos.indexOf(',') != -1) {
         pos = pos.split(',');
     }
 
-  var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(pos[0], pos[1]),
-    map: map,
-    template: '<div>SENSOR_ID: <b>' + id + '</b></div>'
-  });
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(pos[0], pos[1]),
+        map: map,
+        template: '<div>SENSOR_ID: <b>' + id + '</b></div>'
+    });
 
-  map.setCenter(new google.maps.LatLng(pos[0], pos[1]), default_map_zoom_level);
+    map.setCenter(new google.maps.LatLng(pos[0], pos[1]), default_map_zoom_level);
 
     google.maps.event.addDomListener(marker, 'mouseover', function(event) {
-      console.log("mount node", id, sensorNode, sensors);
+        console.log("mount node", id, sensorNode, sensors);
 
         var timestamp = "N/A";
         var light = "N/A";
@@ -51,35 +51,33 @@ function addWeatherStationToMap(sensorNode) {
         var sealevel_pressure = "N/A";
 
 
-      console.log(getSensor(id));
+        console.log(getSensor(id));
 
-      new Vue({
-        el: '#sensor_info',
-          data: {
-              msg: 'helo' + id,
-              id: id,
-              timestamp: timestamp,
-              temp: temp,
-              light: light,
-              humidity: humidity,
-              pressure: pressure,
-              wind_speed: wind_speed,
-              altitude: altitude,
-              sealevel_pressure: sealevel_pressure
-          },
-        template: '<div class="well"><h1>Node {{ id }}</h1>' +
-            '<p><strong>Timestamp: </strong> {{ timestamp }}</p>' +
-            '<p><strong>Temperature: </strong> {{ temp }}</p>' +
-            '<p><strong>Light: </strong> {{ light }}</p>' +
-            '<p><strong>Humidity: </strong> {{ humidity }}</p>' +
-            '<p><strong>Pressure: </strong> {{ pressure }}</p>' +
-            '<p><strong>Wind speed: : </strong> {{ wind_speed }}</p>' +
-            '<p><strong>Altitude: </strong> {{ altitude }}</p>' +
-            '<p><strong>Sealevel pressure</strong> {{ sealevel_pressure }}</p></div>'
-      });
-    // showWindow(event, marker, sensorNode);
-  });
-
+        new Vue({
+            el: '#sensor_info',
+            data: {
+                msg: 'helo' + id,
+                id: id,
+                timestamp: timestamp,
+                temp: temp,
+                light: light,
+                humidity: humidity,
+                pressure: pressure,
+                wind_speed: wind_speed,
+                altitude: altitude,
+                sealevel_pressure: sealevel_pressure
+            },
+            template: '<div class="well"><h1>Node {{ id }}</h1>' +
+                '<p><strong>Timestamp: </strong> {{ timestamp }}</p>' +
+                '<p><strong>Temperature: </strong> {{ temp }}</p>' +
+                '<p><strong>Light: </strong> {{ light }}</p>' +
+                '<p><strong>Humidity: </strong> {{ humidity }}</p>' +
+                '<p><strong>Pressure: </strong> {{ pressure }}</p>' +
+                '<p><strong>Wind speed: : </strong> {{ wind_speed }}</p>' +
+                '<p><strong>Altitude: </strong> {{ altitude }}</p>' +
+                '<p><strong>Sealevel pressure</strong> {{ sealevel_pressure }}</p></div>'
+        });
+    });
 }
 
 
@@ -166,17 +164,17 @@ function SensorReading() {
 }
 
 
-    function SensorNode(obj) {
-      this.id = obj.sensor_id;
-      this.obj = obj;
-      this.position = obj.position;
-      this.sensorDesc = "not defined yet";
-      this.display = function () {
+function SensorNode(obj) {
+    this.id = obj.sensor_id;
+    this.obj = obj;
+    this.position = obj.position;
+    this.sensorDesc = "not defined yet";
+    this.display = function () {
         console.log("Display node " + this.id);
         // grab the UI container. Append whatever graphs you can produce to bottom of page.
-      }
-      this.sensors = {};
-      this.getSensorDescription = function () {
+    };
+    this.sensors = {};
+    this.getSensorDescription = function () {
         var str = "";
         for (prop in this.sensors) {
           if (this.sensors.hasOwnProperty(prop)) {
@@ -186,30 +184,32 @@ function SensorReading() {
           }
         }
         return str;
-      }
+    };
 
 
-        this.update_display = function () {
-            var self = this;
-            var contentStr = "";
-            var container = document.createElement('div');
-            // called after sensor .count is avail
-            for (type in this.count) {
-                contentStr += "(" + this.count[type] + ") " + type + ". ";
-            }
-            var dom_node = document.getElementById('li-' + this.id);
-            console.log('li-' + this.id, dom_node);
-            if (dom_node) {
-                container.addEventListener('click', function (t) {
-                    console.log("click");
-                    setModal("show plot of sensor data here" + self.id);
-                });
-                container.innerHTML = contentStr;
-                dom_node.appendChild(container);
-            }
+    this.update_display = function () {
+        var self = this;
+        var contentStr = "";
+        var container = document.createElement('div');
+        // called after sensor .count is avail
+        console.log(this, this.count);
+        for (type in this.count) {
+            contentStr += "(" + this.count[type] + ") " + type + ". ";
         }
-      this.readings = obj.readings || [];
-      this.init = function (obj) {
+        var dom_node = document.getElementById('li-' + this.id);
+        console.log('li-' + this.id, dom_node);
+        if (dom_node) {
+            container.addEventListener('click', function (t) {
+                console.log("click");
+                setModal("show plot of sensor data here" + self.id);
+            });
+            container.innerHTML = contentStr;
+            dom_node.appendChild(container);
+        }
+    };
+    this.readings = obj.readings || [];
+    this.init = function (obj) {
+        console.error("IS NODE.init() ever called?");
         this.readings = obj.readings;
         obj.readings.forEach(function (r) {
           console.log(r.temp)
@@ -224,25 +224,25 @@ function SensorReading() {
             this.readings
             //.filter(function (r) {return (r.type == sensor); })
             .map(function (e) { return { x: e.timestamp, y: e.temp, group: 1 }; }),
-            "2015-12-09",
-            "2015-12-10"
+                "2015-12-09",
+                "2015-12-10"
           );
-      };
+    };
 
-      this.display();
-    }
+    this.display();
+}
 
-   var items = [];
+var items = [];
 
-    function plotGraph(items, start, end) {
-        var container = document.getElementById('visualization');
-        var dataset = new vis.DataSet(items);
-        console.log("About to plot", dataset);
+function plotGraph(items, start, end) {
+    var container = document.getElementById('visualization');
+    var dataset = new vis.DataSet(items);
+    console.log("About to plot", dataset);
 
 
-        var options = {
-            start: start,
-            end: end
-        };
-        var graph2d = new vis.Graph2d(container, dataset, groups, options);
-    }
+    var options = {
+        start: start,
+        end: end
+    };
+    var graph2d = new vis.Graph2d(container, dataset, options);
+}
