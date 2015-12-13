@@ -117,7 +117,7 @@ def ifAuthenticatedAddEntry(user_id, raw_password):
 
 
 @transaction.atomic
-def signup():
+def signup(request):
     """The idea is that this will return a new nodeid & key."""
     s = securelayer()
     # The master controller will create a new, unique name for connecting nodes.
